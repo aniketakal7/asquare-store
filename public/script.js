@@ -44,8 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle download button (Direct link for Netlify)
     const downloadBtn = document.getElementById('download-btn');
     downloadBtn.addEventListener('click', (e) => {
-        // Direct link to the APK in the public folder
-        window.location.href = '/apps/app-release.apk';
+        // Use relative path for better compatibility
+        window.location.href = 'apps/app-release.apk';
     });
 
     // --- Apps Dropdown Logic ---
