@@ -21,24 +21,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Fetch live app info from backend
+    // Fetch app info (Static fallback for Netlify)
+    const fallbackData = { version: "1.0.4", size: "69MB" };
+    
     fetch('/api/app-info')
         .then(res => res.json())
         .then(data => {
-            console.log('App Info Loaded:', data);
-            // Dynamic updates for version/size if needed
-            const trustBadge = document.querySelector('.trust-badge');
-            if (trustBadge) {
-                trustBadge.innerHTML = `✓ Verified Safe • v${data.version} • ${data.size}`;
-            }
+            updateUI(data);
         })
-        .catch(err => console.error('Could not fetch app info:', err));
+        .catch(err => {
+            console.log('Using static fallback for app info');
+            updateUI(fallbackData);
+        });
 
-    // Handle download button
+    function updateUI(data) {
+        const trustBadge = document.querySelector('.trust-badge');
+        if (trustBadge) {
+            trustBadge.innerHTML = `✓ Verified Safe • v${data.version} • ${data.size}`;
+        }
+    }
+
+    // Handle download button (Direct link for Netlify)
     const downloadBtn = document.getElementById('download-btn');
     downloadBtn.addEventListener('click', (e) => {
-        // Points to our backend download route
-        window.location.href = '/download';
+        // Direct link to the APK in the public folder
+        window.location.href = '/apps/app-release.apk';
     });
 
     // --- Apps Dropdown Logic ---
