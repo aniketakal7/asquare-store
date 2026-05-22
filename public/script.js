@@ -43,10 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle download button (Direct link for Netlify)
     const downloadBtn = document.getElementById('download-btn');
-    downloadBtn.addEventListener('click', (e) => {
-        // Use relative path for better compatibility
-        window.location.href = 'apps/app-release.apk';
-    });
+    if (downloadBtn) {
+        downloadBtn.setAttribute('href', 'apps/app-release.apk');
+        downloadBtn.setAttribute('download', 'FocusMate.apk');
+    }
 
     // --- Apps Dropdown Logic ---
     const dropdownBtn = document.getElementById('more-apps-btn');

@@ -35,7 +35,7 @@ app.get('/download', (req, res) => {
     
     // Check if the file actually exists before trying to download
     if (fs.existsSync(file)) {
-        res.download(file, 'FocusMate-v1.0.4.apk'); // Send it with a nice name
+        res.download(file, 'FocusMate.apk'); // Send it with a nice name
     } else {
         res.status(404).json({
             error: "File not found",
