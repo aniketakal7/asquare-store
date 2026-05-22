@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Fetch app info (Static fallback for Netlify)
-    const fallbackData = { version: "1.0.4", size: "69MB" };
+    const fallbackData = { version: "1.0.5", size: "70MB" };
     
     fetch('/api/app-info')
         .then(res => res.json())

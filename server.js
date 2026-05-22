@@ -16,10 +16,10 @@ const fs = require('fs');
 // Mock database for app versions
 const appMeta = {
     name: "FocusMate",
-    version: "1.0.4",
+    version: "1.0.5",
     filename: "app-release.apk",
-    size: "69MB",
-    releaseDate: "2024-05-15"
+    size: "70MB",
+    releaseDate: "2026-05-22"
 };
 
 // API Endpoint for app info
