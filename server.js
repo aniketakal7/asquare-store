@@ -98,7 +98,7 @@ app.post('/api/apps', upload.fields([
     { name: 'icon', maxCount: 1 }
 ]), (req, res) => {
     try {
-        const { name, category, version, summary, description, developerName, emojiIcon } = req.body;
+        const { name, category, version, summary, description, developerName, emojiIcon, developerId } = req.body;
 
         // Validation
         if (!name || !category || !version || !summary || !developerName) {
@@ -131,7 +131,8 @@ app.post('/api/apps', upload.fields([
             publishedAt: new Date().toISOString(),
             featured: false,
             protected: false,
-            status: 'pending' // Uploaded apps must be reviewed and approved
+            status: 'pending', // Uploaded apps must be reviewed and approved
+            developerId: developerId || 'system-admin' // Multi-developer isolation key
         };
 
         // Handle APK file
@@ -155,13 +156,24 @@ app.post('/api/apps', upload.fields([
         apps.push(newApp);
         writeDB(apps);
 
-        console.log(`[STORE] New app submitted for review: "${name}" by ${developerName}`);
+        console.log(`[STORE] New app submitted for review: "${name}" by ${developerName} (ID: ${newApp.developerId})`);
         res.status(201).json(newApp);
 
     } catch (err) {
         console.error('[STORE] Upload error:', err);
         res.status(500).json({ error: 'Failed to publish app', message: err.message });
     }
+});
+
+// GET /api/developer/apps - Fetch all submissions from a specific developer
+app.get('/api/developer/apps', (req, res) => {
+    const { developerId } = req.query;
+    if (!developerId) {
+        return res.status(400).json({ error: 'Missing developerId query parameter.' });
+    }
+    const apps = readDB();
+    const developerApps = apps.filter(a => a.developerId === developerId);
+    res.json(developerApps);
 });
 
 // GET /api/admin/apps - Fetch all apps (including pending) for moderation

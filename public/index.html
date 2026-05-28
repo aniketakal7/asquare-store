@@ -27,10 +27,6 @@
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
                     Browse
                 </button>
-                <button class="nav-tab" data-tab="developer" id="tab-developer">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                    Developer
-                </button>
             </div>
             <div class="nav-search-mini">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -152,135 +148,6 @@
         </section>
     </main>
 
-    <!-- ============ DEVELOPER PAGE ============ -->
-    <main class="page page-developer" id="page-developer">
-        <section class="dev-hero">
-            <div class="container">
-                <div class="dev-hero-content">
-                    <h1>Developer <span class="gradient-text">Center</span></h1>
-                    <p>Publish your apps to the ASquare Store and reach thousands of users.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="dev-upload-section">
-            <div class="container">
-                <div class="upload-layout">
-                    <!-- Upload Form -->
-                    <div class="upload-form-card glass" id="upload-form-card">
-                        <h2>📤 Publish New App</h2>
-                        <form id="upload-form" enctype="multipart/form-data">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="app-name">App Name *</label>
-                                    <input type="text" id="app-name" name="name" placeholder="e.g. My Awesome App" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="app-version">Version *</label>
-                                    <input type="text" id="app-version" name="version" placeholder="1.0.0" required>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="app-category">Category *</label>
-                                    <select id="app-category" name="category" required>
-                                        <option value="">Select a category</option>
-                                        <option value="Productivity">Productivity</option>
-                                        <option value="Health">Health</option>
-                                        <option value="Developer Tools">Developer Tools</option>
-                                        <option value="Games">Games</option>
-                                        <option value="Utility">Utility</option>
-                                        <option value="Creative">Creative</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="app-developer">Developer Name *</label>
-                                    <input type="text" id="app-developer" name="developerName" placeholder="Your name or studio" required>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="app-summary">Short Summary *</label>
-                                <input type="text" id="app-summary" name="summary" placeholder="One-line summary of your app" maxlength="120" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="app-description">Full Description</label>
-                                <textarea id="app-description" name="description" rows="4" placeholder="Detailed description of your app, features, and benefits..."></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label>App Icon</label>
-                                <div class="icon-chooser">
-                                    <div class="emoji-picker" id="emoji-picker">
-                                        <span class="emoji-option selected" data-emoji="📦">📦</span>
-                                        <span class="emoji-option" data-emoji="🎮">🎮</span>
-                                        <span class="emoji-option" data-emoji="📱">📱</span>
-                                        <span class="emoji-option" data-emoji="🚀">🚀</span>
-                                        <span class="emoji-option" data-emoji="🎯">🎯</span>
-                                        <span class="emoji-option" data-emoji="💡">💡</span>
-                                        <span class="emoji-option" data-emoji="🎵">🎵</span>
-                                        <span class="emoji-option" data-emoji="📷">📷</span>
-                                        <span class="emoji-option" data-emoji="🏆">🏆</span>
-                                        <span class="emoji-option" data-emoji="⚡">⚡</span>
-                                        <span class="emoji-option" data-emoji="🔒">🔒</span>
-                                        <span class="emoji-option" data-emoji="🌍">🌍</span>
-                                    </div>
-                                    <div class="icon-divider">or</div>
-                                    <label class="file-upload-mini" for="app-icon-file" id="icon-upload-label">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                                        Upload Icon
-                                    </label>
-                                    <input type="file" id="app-icon-file" name="icon" accept="image/*" hidden>
-                                    <span class="icon-filename" id="icon-filename"></span>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label>APK / Project File</label>
-                                <div class="dropzone" id="dropzone">
-                                    <div class="dropzone-content" id="dropzone-content">
-                                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                                        <p>Drag & drop your APK here</p>
-                                        <span>or <strong>click to browse</strong></span>
-                                    </div>
-                                    <input type="file" id="app-apk-file" name="apk" accept=".apk,.zip,.aab,.exe" hidden>
-                                </div>
-                                <span class="apk-filename" id="apk-filename"></span>
-                            </div>
-
-                            <button type="submit" class="btn-publish" id="btn-publish">
-                                <span class="btn-publish-text">🚀 Submit for Review</span>
-                                <span class="btn-publish-loading" style="display:none;">
-                                    <span class="spinner"></span> Submitting...
-                                </span>
-                            </button>
-                        </form>
-
-                        <!-- Success Message -->
-                        <div class="upload-success" id="upload-success" style="display:none;">
-                            <div class="success-icon">🎉</div>
-                            <h3>App Submitted for Review!</h3>
-                            <p id="success-message">Your app has been successfully uploaded. It will go live once approved by the moderation team!</p>
-                            <button class="btn-another" id="btn-another">Submit Another App</button>
-                        </div>
-                    </div>
-
-                    <!-- My Uploads Sidebar -->
-                    <div class="my-uploads-card glass" id="my-uploads-card">
-                        <h2>📋 My Published Apps</h2>
-                        <div class="my-uploads-list" id="my-uploads-list">
-                            <!-- Dynamically populated -->
-                        </div>
-                        <div class="empty-state small" id="my-uploads-empty">
-                            <p>No apps published yet.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
 
     <!-- ============ APP DETAIL MODAL ============ -->
     <div class="modal-overlay" id="modal-overlay">
@@ -350,8 +217,9 @@
     </div>
 
     <footer>
-        <div class="container">
+        <div class="container" style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
             <p>&copy; 2026 ASquare Store. All rights reserved. Built with ❤️</p>
+            <p style="font-size: 0.85rem; color: var(--text-dim);">Are you a developer? Submit and manage your apps on the <a href="developer.html" style="color: var(--accent); text-decoration: none; font-weight: 600; transition: var(--transition);" onmouseover="this.style.color='var(--primary-light)'" onmouseout="this.style.color='var(--accent)'">ASquare Console 🚀</a></p>
         </div>
     </footer>
 

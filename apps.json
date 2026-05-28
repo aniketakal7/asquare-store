@@ -34,7 +34,8 @@
     "publishedAt": "2026-05-22T00:00:00.000Z",
     "featured": true,
     "protected": true,
-    "status": "published"
+    "status": "published",
+    "developerId": "system-admin"
   },
   {
     "id": "taskflow",
@@ -66,7 +67,8 @@
     "publishedAt": "2026-04-15T00:00:00.000Z",
     "featured": false,
     "protected": true,
-    "status": "published"
+    "status": "published",
+    "developerId": "system-admin"
   },
   {
     "id": "zenspace",
@@ -98,7 +100,8 @@
     "publishedAt": "2026-03-10T00:00:00.000Z",
     "featured": true,
     "protected": true,
-    "status": "published"
+    "status": "published",
+    "developerId": "system-admin"
   },
   {
     "id": "dataviz",
@@ -130,7 +133,8 @@
     "publishedAt": "2026-02-28T00:00:00.000Z",
     "featured": false,
     "protected": true,
-    "status": "published"
+    "status": "published",
+    "developerId": "system-admin"
   },
   {
     "id": "codemate",
@@ -162,7 +166,8 @@
     "publishedAt": "2026-04-01T00:00:00.000Z",
     "featured": false,
     "protected": true,
-    "status": "published"
+    "status": "published",
+    "developerId": "system-admin"
   },
   {
     "id": "healthsync",
@@ -194,6 +199,7 @@
     "publishedAt": "2026-01-20T00:00:00.000Z",
     "featured": false,
     "protected": true,
-    "status": "published"
+    "status": "published",
+    "developerId": "system-admin"
   }
 ]

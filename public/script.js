@@ -41,19 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultsCount = document.getElementById('results-count');
     const browseEmpty = document.getElementById('browse-empty');
 
-    // Developer
-    const uploadForm = document.getElementById('upload-form');
-    const dropzone = document.getElementById('dropzone');
-    const apkInput = document.getElementById('app-apk-file');
-    const apkFilename = document.getElementById('apk-filename');
-    const iconFileInput = document.getElementById('app-icon-file');
-    const iconFilename = document.getElementById('icon-filename');
-    const emojiPicker = document.getElementById('emoji-picker');
-    const btnPublish = document.getElementById('btn-publish');
-    const uploadSuccess = document.getElementById('upload-success');
-    const btnAnother = document.getElementById('btn-another');
-    const myUploadsList = document.getElementById('my-uploads-list');
-    const myUploadsEmpty = document.getElementById('my-uploads-empty');
 
     // Modal
     const modalOverlay = document.getElementById('modal-overlay');
@@ -91,10 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => searchInput && searchInput.focus(), 300);
         }
 
-        // If switching to developer, refresh uploads list
-        if (tabName === 'developer') {
-            renderMyUploads();
-        }
+
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -140,7 +124,6 @@ document.addEventListener('DOMContentLoaded', () => {
         renderDiscoverGrid();
         renderRecentRow();
         renderBrowseGrid();
-        renderMyUploads();
     }
 
     // ==================
@@ -473,237 +456,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // ==================
-    // DEVELOPER CENTER
-    // ==================
 
-    // Emoji picker
-    let selectedEmoji = '📦';
-    if (emojiPicker) {
-        emojiPicker.addEventListener('click', (e) => {
-            const option = e.target.closest('.emoji-option');
-            if (!option) return;
-            emojiPicker.querySelectorAll('.emoji-option').forEach(o => o.classList.remove('selected'));
-            option.classList.add('selected');
-            selectedEmoji = option.dataset.emoji;
-
-            // Deselect icon file if emoji is picked
-            if (iconFileInput) iconFileInput.value = '';
-            if (iconFilename) iconFilename.textContent = '';
-        });
-    }
-
-    // Icon file input
-    if (iconFileInput) {
-        iconFileInput.addEventListener('change', () => {
-            if (iconFileInput.files[0]) {
-                iconFilename.textContent = iconFileInput.files[0].name;
-                // Deselect emoji
-                emojiPicker.querySelectorAll('.emoji-option').forEach(o => o.classList.remove('selected'));
-                selectedEmoji = null;
-            }
-        });
-    }
-
-    // Dropzone
-    if (dropzone) {
-        dropzone.addEventListener('click', () => apkInput.click());
-
-        dropzone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropzone.classList.add('dragover');
-        });
-
-        dropzone.addEventListener('dragleave', () => {
-            dropzone.classList.remove('dragover');
-        });
-
-        dropzone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropzone.classList.remove('dragover');
-            if (e.dataTransfer.files[0]) {
-                apkInput.files = e.dataTransfer.files;
-                updateApkFilename();
-            }
-        });
-    }
-
-    if (apkInput) {
-        apkInput.addEventListener('change', updateApkFilename);
-    }
-
-    function updateApkFilename() {
-        if (apkInput.files[0]) {
-            const file = apkInput.files[0];
-            const sizeMB = (file.size / (1024 * 1024)).toFixed(1);
-            apkFilename.textContent = `📎 ${file.name} (${sizeMB}MB)`;
-            document.getElementById('dropzone-content').innerHTML = `
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                <p style="color: var(--accent);">File selected!</p>
-                <span>${file.name}</span>
-            `;
-        }
-    }
-
-    // Form submission
-    if (uploadForm) {
-        uploadForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const formData = new FormData();
-            formData.append('name', document.getElementById('app-name').value.trim());
-            formData.append('category', document.getElementById('app-category').value);
-            formData.append('version', document.getElementById('app-version').value.trim());
-            formData.append('summary', document.getElementById('app-summary').value.trim());
-            formData.append('description', document.getElementById('app-description').value.trim());
-            formData.append('developerName', document.getElementById('app-developer').value.trim());
-
-            // Icon: file or emoji
-            if (iconFileInput.files[0]) {
-                formData.append('icon', iconFileInput.files[0]);
-            }
-            formData.append('emojiIcon', selectedEmoji || '📦');
-
-            // APK
-            if (apkInput.files[0]) {
-                formData.append('apk', apkInput.files[0]);
-            }
-
-            // UI loading state
-            btnPublish.disabled = true;
-            btnPublish.querySelector('.btn-publish-text').style.display = 'none';
-            btnPublish.querySelector('.btn-publish-loading').style.display = 'inline-flex';
-
-            try {
-                const res = await fetch('/api/apps', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                if (!res.ok) {
-                    const err = await res.json();
-                    throw new Error(err.error || 'Upload failed');
-                }
-
-                const newApp = await res.json();
-                allApps.push(newApp);
-
-                // Show success state
-                uploadForm.style.display = 'none';
-                uploadSuccess.style.display = 'block';
-                document.getElementById('success-message').textContent =
-                    `"${newApp.name}" has been submitted for review! It will go live once audited and approved by the moderation team.`;
-
-                showToast('🎉', `${newApp.name} submitted for review!`);
-                renderAll();
-
-            } catch (err) {
-                console.error('Upload error:', err);
-                showToast('❌', err.message || 'Failed to publish app.');
-            } finally {
-                btnPublish.disabled = false;
-                btnPublish.querySelector('.btn-publish-text').style.display = '';
-                btnPublish.querySelector('.btn-publish-loading').style.display = 'none';
-            }
-        });
-    }
-
-    // "Publish Another" button
-    if (btnAnother) {
-        btnAnother.addEventListener('click', () => {
-            uploadForm.reset();
-            uploadForm.style.display = '';
-            uploadSuccess.style.display = 'none';
-            apkFilename.textContent = '';
-            iconFilename.textContent = '';
-            selectedEmoji = '📦';
-
-            // Reset emoji picker
-            emojiPicker.querySelectorAll('.emoji-option').forEach(o => o.classList.remove('selected'));
-            emojiPicker.querySelector('[data-emoji="📦"]')?.classList.add('selected');
-
-            // Reset dropzone
-            document.getElementById('dropzone-content').innerHTML = `
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                <p>Drag & drop your APK here</p>
-                <span>or <strong>click to browse</strong></span>
-            `;
-        });
-    }
-
-    // My Uploads list
-    function renderMyUploads() {
-        if (!myUploadsList) return;
-
-        if (allApps.length === 0) {
-            myUploadsList.innerHTML = '';
-            myUploadsEmpty.style.display = '';
-            return;
-        }
-
-        myUploadsEmpty.style.display = 'none';
-
-        // Show all apps (in a real app, you'd filter by current user)
-        const sorted = [...allApps].sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
-
-        myUploadsList.innerHTML = sorted.map(app => {
-            const iconContent = app.iconFile
-                ? `<img src="${app.iconFile}" alt="${app.name}">`
-                : (app.icon || '📦');
-
-            const actionHTML = app.protected
-                ? `<span class="protected-badge" title="System Protected App" style="font-size: 1.1rem; padding: 6px; cursor: default; opacity: 0.85;">🛡️</span>`
-                : `<button class="btn-delete-app" title="Delete app" data-delete-id="${app.id}">🗑️</button>`;
-
-            return `
-                <div class="my-upload-item" data-app-id="${app.id}">
-                     <div class="my-upload-icon">${iconContent}</div>
-                     <div class="my-upload-info">
-                         <div class="my-upload-name">${escapeHTML(app.name)}</div>
-                         <div class="my-upload-meta">v${app.version} • ${formatNumber(app.downloads)} downloads</div>
-                     </div>
-                     ${actionHTML}
-                </div>
-            `;
-        }).join('');
-
-        // Bind delete buttons
-        myUploadsList.querySelectorAll('.btn-delete-app').forEach(btn => {
-            btn.addEventListener('click', async (e) => {
-                e.stopPropagation();
-                const id = btn.dataset.deleteId;
-                const app = allApps.find(a => a.id === id);
-                if (!app) return;
-
-                const adminKey = prompt(`Enter the Admin Password to delete "${app.name}":`);
-                if (adminKey === null) return; // Cancelled
-                if (!adminKey.trim()) {
-                    showToast('❌', 'Admin password cannot be empty.');
-                    return;
-                }
-
-                try {
-                    const res = await fetch(`/api/apps/${id}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'x-admin-key': adminKey
-                        }
-                    });
-                    
-                    if (res.ok) {
-                        allApps = allApps.filter(a => a.id !== id);
-                        showToast('🗑️', `"${app.name}" has been removed.`);
-                        renderAll();
-                    } else {
-                        const err = await res.json();
-                        showToast('❌', err.error || 'Failed to delete app.');
-                    }
-                } catch (err) {
-                    showToast('❌', 'Failed to delete app.');
-                }
-            });
-        });
-    }
 
     // ==================
     // TOAST
