@@ -1,0 +1,187 @@
+[
+  {
+    "id": "focusmate",
+    "name": "FocusMate",
+    "category": "Productivity",
+    "version": "1.0.5",
+    "summary": "Premium AI assistant for productivity and focus.",
+    "description": "FocusMate is your intelligent productivity companion. It uses advanced AI to analyze your work patterns, suggest optimal focus sessions, and help you maintain deep concentration. Features include Smart Flow Sessions, distraction blocking, break reminders, and detailed productivity analytics. Perfect for students, professionals, and creatives who want to achieve peak performance.",
+    "developerName": "ASquare Labs",
+    "icon": "🧠",
+    "iconFile": "uploads/icons/focusmate-icon.png",
+    "apkFile": "app-release.apk",
+    "size": "70MB",
+    "downloads": 12453,
+    "rating": 4.8,
+    "reviews": [
+      {
+        "user": "Aarav K.",
+        "rating": 5,
+        "comment": "Changed how I study. The flow timer is genius!"
+      },
+      {
+        "user": "Priya M.",
+        "rating": 5,
+        "comment": "Best focus app I've tried. No ads, no nonsense."
+      },
+      {
+        "user": "Rahul S.",
+        "rating": 4,
+        "comment": "Great app, would love dark mode scheduling."
+      }
+    ],
+    "screenshots": [],
+    "publishedAt": "2026-05-22T00:00:00.000Z",
+    "featured": true
+  },
+  {
+    "id": "taskflow",
+    "name": "TaskFlow",
+    "category": "Productivity",
+    "version": "2.3.1",
+    "summary": "Visual task management with Kanban boards and smart deadlines.",
+    "description": "TaskFlow transforms how you organize your work. Create beautiful Kanban boards, set intelligent deadlines that adapt to your pace, and collaborate with your team in real-time. Features include drag-and-drop task management, recurring tasks, priority tagging, calendar integration, and weekly progress reports. Built for teams that ship fast.",
+    "developerName": "ASquare Labs",
+    "icon": "📝",
+    "iconFile": null,
+    "apkFile": null,
+    "size": "45MB",
+    "downloads": 8320,
+    "rating": 4.6,
+    "reviews": [
+      {
+        "user": "Sneha R.",
+        "rating": 5,
+        "comment": "Replaced Trello for my entire team!"
+      },
+      {
+        "user": "Dev P.",
+        "rating": 4,
+        "comment": "Smooth UI, wish it had calendar sync."
+      }
+    ],
+    "screenshots": [],
+    "publishedAt": "2026-04-15T00:00:00.000Z",
+    "featured": false
+  },
+  {
+    "id": "zenspace",
+    "name": "ZenSpace",
+    "category": "Health",
+    "version": "1.8.0",
+    "summary": "Guided meditation and mindfulness for daily calm.",
+    "description": "Find your inner peace with ZenSpace. Featuring over 200 guided meditation sessions, breathing exercises, sleep stories, and ambient soundscapes. Track your mindfulness streak, join community challenges, and receive personalized recommendations based on your mood and goals. Whether you're a beginner or experienced practitioner, ZenSpace meets you where you are.",
+    "developerName": "ASquare Labs",
+    "icon": "🧘",
+    "iconFile": null,
+    "apkFile": null,
+    "size": "62MB",
+    "downloads": 15780,
+    "rating": 4.9,
+    "reviews": [
+      {
+        "user": "Meera J.",
+        "rating": 5,
+        "comment": "The sleep stories are incredible. I fall asleep in 5 minutes."
+      },
+      {
+        "user": "Anil T.",
+        "rating": 5,
+        "comment": "Beautiful design and calming sounds."
+      }
+    ],
+    "screenshots": [],
+    "publishedAt": "2026-03-10T00:00:00.000Z",
+    "featured": true
+  },
+  {
+    "id": "dataviz",
+    "name": "DataViz",
+    "category": "Developer Tools",
+    "version": "3.1.0",
+    "summary": "Turn raw data into stunning interactive visualizations.",
+    "description": "DataViz is a powerful data visualization toolkit that helps you create beautiful, interactive charts, dashboards, and infographics from any data source. Supports CSV, JSON, SQL databases, and REST APIs. Features include 50+ chart types, real-time data streaming, export to PDF/PNG, collaborative editing, and custom theming. Used by data scientists and analysts worldwide.",
+    "developerName": "VizCraft Studios",
+    "icon": "📊",
+    "iconFile": null,
+    "apkFile": null,
+    "size": "38MB",
+    "downloads": 6540,
+    "rating": 4.5,
+    "reviews": [
+      {
+        "user": "Kiran D.",
+        "rating": 5,
+        "comment": "Best charting tool on mobile. Period."
+      },
+      {
+        "user": "Sara W.",
+        "rating": 4,
+        "comment": "Love the SQL integration, needs more chart options."
+      }
+    ],
+    "screenshots": [],
+    "publishedAt": "2026-02-28T00:00:00.000Z",
+    "featured": false
+  },
+  {
+    "id": "codemate",
+    "name": "CodeMate",
+    "category": "Developer Tools",
+    "version": "1.2.0",
+    "summary": "AI-powered code editor and pair programming assistant.",
+    "description": "CodeMate is your pocket-sized IDE with a built-in AI coding assistant. Write, debug, and deploy code on the go with support for 30+ programming languages. Features include intelligent code completion, real-time error highlighting, Git integration, snippet library, and an AI chat that explains code and suggests refactors. Perfect for developers who code everywhere.",
+    "developerName": "ASquare Labs",
+    "icon": "💻",
+    "iconFile": null,
+    "apkFile": null,
+    "size": "52MB",
+    "downloads": 9870,
+    "rating": 4.7,
+    "reviews": [
+      {
+        "user": "Vikram N.",
+        "rating": 5,
+        "comment": "The AI assistant is scary good at debugging!"
+      },
+      {
+        "user": "Ananya G.",
+        "rating": 4,
+        "comment": "Great for quick fixes on mobile."
+      }
+    ],
+    "screenshots": [],
+    "publishedAt": "2026-04-01T00:00:00.000Z",
+    "featured": false
+  },
+  {
+    "id": "healthsync",
+    "name": "HealthSync",
+    "category": "Health",
+    "version": "2.0.3",
+    "summary": "Comprehensive health tracking with AI-powered insights.",
+    "description": "HealthSync is your complete health companion. Track nutrition, exercise, sleep, heart rate, and hydration all in one beautiful dashboard. Powered by AI that learns your habits and provides personalized health recommendations. Features include meal logging with photo recognition, workout plans, sleep analysis, medication reminders, and integration with popular fitness wearables.",
+    "developerName": "WellTech Inc.",
+    "icon": "❤️",
+    "iconFile": null,
+    "apkFile": null,
+    "size": "48MB",
+    "downloads": 11200,
+    "rating": 4.4,
+    "reviews": [
+      {
+        "user": "Ritu S.",
+        "rating": 5,
+        "comment": "Tracks everything! Love the meal photo feature."
+      },
+      {
+        "user": "Amit K.",
+        "rating": 4,
+        "comment": "Good fitness tracking, needs better wearable sync."
+      }
+    ],
+    "screenshots": [],
+    "publishedAt": "2026-01-20T00:00:00.000Z",
+    "featured": false
+  }
+]

@@ -3,120 +3,355 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASquare | Download FocusMate Assistant</title>
-    <meta name="description" content="Download FocusMate, the premium AI assistant for productivity and focus. Get the official APK directly from the ASquare App Store.">
-    
+    <title>ASquare Store | Your Premium App Marketplace</title>
+    <meta name="description" content="Discover, download, and publish apps on the ASquare Store. A premium app marketplace for Android apps, tools, and utilities.">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="container">
-            <div class="logo">A<span>Square</span></div>
-            <div class="nav-links">
-                <a href="#features">Features</a>
-                <a href="#download" class="btn-primary">Download Now</a>
-                <div class="apps-dropdown-container">
-                    <button id="more-apps-btn" class="waffle-btn" title="More Apps">
-                        <span></span><span></span><span></span>
-                        <span></span><span></span><span></span>
-                        <span></span><span></span><span></span>
-                    </button>
-                    
-                    <div id="more-apps-dropdown" class="dropdown-menu glass">
-                        <h3>More Apps</h3>
-                        <div class="apps-grid-small">
-                            <div class="app-mini-icon" title="TaskFlow">📝</div>
-                            <div class="app-mini-icon" title="ZenSpace">🧘</div>
-                            <div class="app-mini-icon" title="DataViz">📊</div>
-                            <div class="app-mini-icon" title="CodeMate">💻</div>
-                            <div class="app-mini-icon" title="HealthSync">❤️</div>
-                            <div class="app-mini-icon" title="CloudBox">☁️</div>
-                        </div>
-                    </div>
-                </div>
+    <!-- ============ NAVBAR ============ -->
+    <nav class="navbar" id="navbar">
+        <div class="container nav-container">
+            <a href="#" class="logo" id="logo-home">A<span>Square</span></a>
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-tab="discover" id="tab-discover">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+                    Discover
+                </button>
+                <button class="nav-tab" data-tab="browse" id="tab-browse">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                    Browse
+                </button>
+                <button class="nav-tab" data-tab="developer" id="tab-developer">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                    Developer
+                </button>
+            </div>
+            <div class="nav-search-mini">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             </div>
         </div>
     </nav>
 
-    <header class="hero">
-        <div class="container grid">
-            <div class="hero-content">
-                <h1 class="fade-in">The Future of Focus is <span>Here.</span></h1>
-                <p class="fade-in delay-1">Download FocusMate directly from the ASquare Store. Experience a premium AI assistant designed to enhance your productivity without the limits of traditional app stores.</p>
-                <div class="hero-actions fade-in delay-2">
-                    <a href="#download" class="btn-main">
-                        <span class="icon">📥</span>
-                        <div class="btn-text">
-                            <small>Download for</small>
-                            <strong>Android APK</strong>
+    <!-- ============ DISCOVER PAGE ============ -->
+    <main class="page page-discover active" id="page-discover">
+        <!-- Hero / Featured App Banner -->
+        <section class="store-hero">
+            <div class="hero-bg-effects">
+                <div class="hero-orb orb-1"></div>
+                <div class="hero-orb orb-2"></div>
+                <div class="hero-orb orb-3"></div>
+            </div>
+            <div class="container">
+                <div class="featured-banner glass" id="featured-banner">
+                    <div class="featured-badge">⭐ FEATURED</div>
+                    <div class="featured-content">
+                        <div class="featured-icon" id="featured-icon">🧠</div>
+                        <div class="featured-info">
+                            <h1 id="featured-name">FocusMate</h1>
+                            <p class="featured-developer" id="featured-developer">ASquare Labs</p>
+                            <p class="featured-summary" id="featured-summary">Premium AI assistant for productivity and focus.</p>
+                            <div class="featured-meta">
+                                <span class="meta-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> <span id="featured-rating">4.8</span></span>
+                                <span class="meta-chip">📥 <span id="featured-downloads">12K+</span></span>
+                                <span class="meta-chip">📦 <span id="featured-size">70MB</span></span>
+                            </div>
                         </div>
-                    </a>
-                    <p class="trust-badge">✓ Verified Safe • v1.0.5 • 70MB</p>
+                    </div>
+                    <button class="btn-install" id="featured-install-btn">Install</button>
                 </div>
             </div>
-            <div class="hero-image fade-in delay-3">
-                <div class="glass-card">
-                    <img src="focusmate_hero_mockup.png" alt="FocusMate Mobile App" id="hero-img">
-                </div>
-                <div class="blob"></div>
-            </div>
-        </div>
-    </header>
+        </section>
 
-    <section id="features" class="features scroll-reveal">
-        <div class="container">
-            <h2 class="section-title scroll-reveal">Why FocusMate?</h2>
-            <div class="features-grid">
-                <div class="feature-card scroll-reveal delay-1">
-                    <div class="feature-icon">⏱️</div>
-                    <h3>Smart Flow Sessions</h3>
-                    <p>Intelligent timers that adapt to your cognitive energy levels, helping you stay in the flow state for longer.</p>
-                </div>
-                <div class="feature-card scroll-reveal delay-2">
-                    <div class="feature-icon">🛡️</div>
-                    <h3>Direct & Secure</h3>
-                    <p>No middleman. Get the authentic app directly from our servers with end-to-end encryption.</p>
-                </div>
-                <div class="feature-card scroll-reveal delay-3">
-                    <div class="feature-icon">🧠</div>
-                    <h3>Advanced AI</h3>
-                    <p>Integrated with the FocusMate AI engine to provide the most accurate and helpful productivity coaching.</p>
+        <!-- Categories -->
+        <section class="categories-section">
+            <div class="container">
+                <h2 class="section-heading">Categories</h2>
+                <div class="category-pills" id="category-pills">
+                    <button class="pill active" data-category="all">🔥 All</button>
+                    <button class="pill" data-category="Productivity">⚡ Productivity</button>
+                    <button class="pill" data-category="Health">💚 Health</button>
+                    <button class="pill" data-category="Developer Tools">🛠️ Dev Tools</button>
+                    <button class="pill" data-category="Games">🎮 Games</button>
+                    <button class="pill" data-category="Utility">🔧 Utility</button>
+                    <button class="pill" data-category="Creative">🎨 Creative</button>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="download" class="download-section scroll-reveal">
-        <div class="container">
-            <div class="download-box glass scroll-reveal">
-                <h2>Ready to elevate your workflow?</h2>
-                <p>Click below to download the latest version of FocusMate for Android.</p>
-                <div class="download-actions">
-                    <a href="apps/app-release.apk" download="FocusMate.apk" class="btn-download large" id="download-btn">
-                        Download Latest APK
-                    </a>
+        <!-- Top Apps Grid -->
+        <section class="apps-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-heading">Top Apps</h2>
+                    <button class="see-all-btn" id="see-all-btn">See All →</button>
                 </div>
-                <div class="install-guide">
-                    <h3>How to install:</h3>
-                    <ol>
-                        <li>Download the APK file.</li>
-                        <li>Open the file and select <strong>"Install"</strong>.</li>
-                        <li>If prompted, allow <strong>"Install from Unknown Sources"</strong> in your settings.</li>
-                        <li>Launch FocusMate and enjoy!</li>
-                    </ol>
+                <div class="apps-grid" id="discover-apps-grid">
+                    <!-- Dynamically populated -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Recently Added -->
+        <section class="apps-section">
+            <div class="container">
+                <h2 class="section-heading">Recently Added</h2>
+                <div class="apps-scroll-row" id="recent-apps-row">
+                    <!-- Dynamically populated -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ============ BROWSE PAGE ============ -->
+    <main class="page page-browse" id="page-browse">
+        <section class="browse-header">
+            <div class="container">
+                <h1>Browse All Apps</h1>
+                <div class="browse-controls">
+                    <div class="search-bar" id="search-bar">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input type="text" id="search-input" placeholder="Search apps..." autocomplete="off">
+                        <button class="search-clear" id="search-clear">&times;</button>
+                    </div>
+                    <select class="sort-select" id="sort-select">
+                        <option value="downloads">🔥 Trending</option>
+                        <option value="newest">🆕 Newest</option>
+                        <option value="name">🔤 Name A-Z</option>
+                        <option value="rating">⭐ Top Rated</option>
+                    </select>
+                </div>
+                <div class="browse-category-pills" id="browse-category-pills">
+                    <button class="pill active" data-category="all">All</button>
+                    <button class="pill" data-category="Productivity">Productivity</button>
+                    <button class="pill" data-category="Health">Health</button>
+                    <button class="pill" data-category="Developer Tools">Dev Tools</button>
+                    <button class="pill" data-category="Games">Games</button>
+                    <button class="pill" data-category="Utility">Utility</button>
+                    <button class="pill" data-category="Creative">Creative</button>
+                </div>
+            </div>
+        </section>
+        <section class="browse-results">
+            <div class="container">
+                <p class="results-count" id="results-count"></p>
+                <div class="apps-grid full-grid" id="browse-apps-grid">
+                    <!-- Dynamically populated -->
+                </div>
+                <div class="empty-state" id="browse-empty" style="display:none;">
+                    <div class="empty-icon">🔍</div>
+                    <h3>No apps found</h3>
+                    <p>Try a different search term or category.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ============ DEVELOPER PAGE ============ -->
+    <main class="page page-developer" id="page-developer">
+        <section class="dev-hero">
+            <div class="container">
+                <div class="dev-hero-content">
+                    <h1>Developer <span class="gradient-text">Center</span></h1>
+                    <p>Publish your apps to the ASquare Store and reach thousands of users.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="dev-upload-section">
+            <div class="container">
+                <div class="upload-layout">
+                    <!-- Upload Form -->
+                    <div class="upload-form-card glass" id="upload-form-card">
+                        <h2>📤 Publish New App</h2>
+                        <form id="upload-form" enctype="multipart/form-data">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="app-name">App Name *</label>
+                                    <input type="text" id="app-name" name="name" placeholder="e.g. My Awesome App" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="app-version">Version *</label>
+                                    <input type="text" id="app-version" name="version" placeholder="1.0.0" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="app-category">Category *</label>
+                                    <select id="app-category" name="category" required>
+                                        <option value="">Select a category</option>
+                                        <option value="Productivity">Productivity</option>
+                                        <option value="Health">Health</option>
+                                        <option value="Developer Tools">Developer Tools</option>
+                                        <option value="Games">Games</option>
+                                        <option value="Utility">Utility</option>
+                                        <option value="Creative">Creative</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="app-developer">Developer Name *</label>
+                                    <input type="text" id="app-developer" name="developerName" placeholder="Your name or studio" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="app-summary">Short Summary *</label>
+                                <input type="text" id="app-summary" name="summary" placeholder="One-line summary of your app" maxlength="120" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="app-description">Full Description</label>
+                                <textarea id="app-description" name="description" rows="4" placeholder="Detailed description of your app, features, and benefits..."></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label>App Icon</label>
+                                <div class="icon-chooser">
+                                    <div class="emoji-picker" id="emoji-picker">
+                                        <span class="emoji-option selected" data-emoji="📦">📦</span>
+                                        <span class="emoji-option" data-emoji="🎮">🎮</span>
+                                        <span class="emoji-option" data-emoji="📱">📱</span>
+                                        <span class="emoji-option" data-emoji="🚀">🚀</span>
+                                        <span class="emoji-option" data-emoji="🎯">🎯</span>
+                                        <span class="emoji-option" data-emoji="💡">💡</span>
+                                        <span class="emoji-option" data-emoji="🎵">🎵</span>
+                                        <span class="emoji-option" data-emoji="📷">📷</span>
+                                        <span class="emoji-option" data-emoji="🏆">🏆</span>
+                                        <span class="emoji-option" data-emoji="⚡">⚡</span>
+                                        <span class="emoji-option" data-emoji="🔒">🔒</span>
+                                        <span class="emoji-option" data-emoji="🌍">🌍</span>
+                                    </div>
+                                    <div class="icon-divider">or</div>
+                                    <label class="file-upload-mini" for="app-icon-file" id="icon-upload-label">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                                        Upload Icon
+                                    </label>
+                                    <input type="file" id="app-icon-file" name="icon" accept="image/*" hidden>
+                                    <span class="icon-filename" id="icon-filename"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>APK / Project File</label>
+                                <div class="dropzone" id="dropzone">
+                                    <div class="dropzone-content" id="dropzone-content">
+                                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                        <p>Drag & drop your APK here</p>
+                                        <span>or <strong>click to browse</strong></span>
+                                    </div>
+                                    <input type="file" id="app-apk-file" name="apk" accept=".apk,.zip,.aab,.exe" hidden>
+                                </div>
+                                <span class="apk-filename" id="apk-filename"></span>
+                            </div>
+
+                            <button type="submit" class="btn-publish" id="btn-publish">
+                                <span class="btn-publish-text">🚀 Publish App</span>
+                                <span class="btn-publish-loading" style="display:none;">
+                                    <span class="spinner"></span> Publishing...
+                                </span>
+                            </button>
+                        </form>
+
+                        <!-- Success Message -->
+                        <div class="upload-success" id="upload-success" style="display:none;">
+                            <div class="success-icon">🎉</div>
+                            <h3>App Published Successfully!</h3>
+                            <p id="success-message">Your app is now live on the ASquare Store.</p>
+                            <button class="btn-another" id="btn-another">Publish Another</button>
+                        </div>
+                    </div>
+
+                    <!-- My Uploads Sidebar -->
+                    <div class="my-uploads-card glass" id="my-uploads-card">
+                        <h2>📋 My Published Apps</h2>
+                        <div class="my-uploads-list" id="my-uploads-list">
+                            <!-- Dynamically populated -->
+                        </div>
+                        <div class="empty-state small" id="my-uploads-empty">
+                            <p>No apps published yet.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ============ APP DETAIL MODAL ============ -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal-content glass" id="modal-content">
+            <button class="modal-close" id="modal-close">&times;</button>
+            <div class="modal-header">
+                <div class="modal-icon" id="modal-icon">📦</div>
+                <div class="modal-title-area">
+                    <h2 id="modal-name">App Name</h2>
+                    <p class="modal-developer" id="modal-developer">Developer</p>
+                    <div class="modal-badges">
+                        <span class="badge-category" id="modal-category">Category</span>
+                        <span class="badge-version" id="modal-version">v1.0.0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-stats">
+                <div class="stat">
+                    <span class="stat-value" id="modal-rating">4.5</span>
+                    <span class="stat-label">Rating</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <span class="stat-value" id="modal-downloads">0</span>
+                    <span class="stat-label">Downloads</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <span class="stat-value" id="modal-size">N/A</span>
+                    <span class="stat-label">Size</span>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-modal-install" id="modal-install-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Install
+                </button>
+                <button class="btn-modal-secondary" id="modal-share-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                    Share
+                </button>
+            </div>
+            <div class="modal-body">
+                <h3>About this app</h3>
+                <p class="modal-description" id="modal-description">Description goes here...</p>
+
+                <h3>Reviews</h3>
+                <div class="modal-reviews" id="modal-reviews">
+                    <!-- Dynamically populated -->
+                </div>
+                <div class="no-reviews" id="no-reviews" style="display:none;">
+                    <p>No reviews yet. Be the first to try this app!</p>
+                </div>
+
+                <div class="modal-footer-info">
+                    <p>Published: <span id="modal-published">-</span></p>
+                    <p class="verified-badge">✓ Verified by ASquare</p>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+
+    <!-- ============ TOAST NOTIFICATION ============ -->
+    <div class="toast" id="toast">
+        <span class="toast-icon" id="toast-icon">✅</span>
+        <span class="toast-message" id="toast-message">Action completed</span>
+    </div>
 
     <footer>
         <div class="container">
-            <p>&copy; 2024 ASquare. All rights reserved.</p>
+            <p>&copy; 2026 ASquare Store. All rights reserved. Built with ❤️</p>
         </div>
     </footer>
 
