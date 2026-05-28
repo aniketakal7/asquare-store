@@ -32,7 +32,8 @@
     ],
     "screenshots": [],
     "publishedAt": "2026-05-22T00:00:00.000Z",
-    "featured": true
+    "featured": true,
+    "protected": true
   },
   {
     "id": "taskflow",
@@ -62,7 +63,8 @@
     ],
     "screenshots": [],
     "publishedAt": "2026-04-15T00:00:00.000Z",
-    "featured": false
+    "featured": false,
+    "protected": true
   },
   {
     "id": "zenspace",
@@ -92,7 +94,8 @@
     ],
     "screenshots": [],
     "publishedAt": "2026-03-10T00:00:00.000Z",
-    "featured": true
+    "featured": true,
+    "protected": true
   },
   {
     "id": "dataviz",
@@ -122,7 +125,8 @@
     ],
     "screenshots": [],
     "publishedAt": "2026-02-28T00:00:00.000Z",
-    "featured": false
+    "featured": false,
+    "protected": true
   },
   {
     "id": "codemate",
@@ -152,7 +156,8 @@
     ],
     "screenshots": [],
     "publishedAt": "2026-04-01T00:00:00.000Z",
-    "featured": false
+    "featured": false,
+    "protected": true
   },
   {
     "id": "healthsync",
@@ -182,6 +187,7 @@
     ],
     "screenshots": [],
     "publishedAt": "2026-01-20T00:00:00.000Z",
-    "featured": false
+    "featured": false,
+    "protected": true
   }
 ]

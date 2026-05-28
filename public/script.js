@@ -651,14 +651,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 ? `<img src="${app.iconFile}" alt="${app.name}">`
                 : (app.icon || '📦');
 
+            const actionHTML = app.protected
+                ? `<span class="protected-badge" title="System Protected App" style="font-size: 1.1rem; padding: 6px; cursor: default; opacity: 0.85;">🛡️</span>`
+                : `<button class="btn-delete-app" title="Delete app" data-delete-id="${app.id}">🗑️</button>`;
+
             return `
                 <div class="my-upload-item" data-app-id="${app.id}">
-                    <div class="my-upload-icon">${iconContent}</div>
-                    <div class="my-upload-info">
-                        <div class="my-upload-name">${escapeHTML(app.name)}</div>
-                        <div class="my-upload-meta">v${app.version} • ${formatNumber(app.downloads)} downloads</div>
-                    </div>
-                    <button class="btn-delete-app" title="Delete app" data-delete-id="${app.id}">🗑️</button>
+                     <div class="my-upload-icon">${iconContent}</div>
+                     <div class="my-upload-info">
+                         <div class="my-upload-name">${escapeHTML(app.name)}</div>
+                         <div class="my-upload-meta">v${app.version} • ${formatNumber(app.downloads)} downloads</div>
+                     </div>
+                     ${actionHTML}
                 </div>
             `;
         }).join('');
@@ -671,14 +675,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 const app = allApps.find(a => a.id === id);
                 if (!app) return;
 
-                if (!confirm(`Delete "${app.name}"? This cannot be undone.`)) return;
+                const adminKey = prompt(`Enter the Admin Password to delete "${app.name}":`);
+                if (adminKey === null) return; // Cancelled
+                if (!adminKey.trim()) {
+                    showToast('❌', 'Admin password cannot be empty.');
+                    return;
+                }
 
                 try {
-                    const res = await fetch(`/api/apps/${id}`, { method: 'DELETE' });
+                    const res = await fetch(`/api/apps/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'x-admin-key': adminKey
+                        }
+                    });
+                    
                     if (res.ok) {
                         allApps = allApps.filter(a => a.id !== id);
                         showToast('🗑️', `"${app.name}" has been removed.`);
                         renderAll();
+                    } else {
+                        const err = await res.json();
+                        showToast('❌', err.error || 'Failed to delete app.');
                     }
                 } catch (err) {
                     showToast('❌', 'Failed to delete app.');

@@ -8,6 +8,9 @@ const multer = require('multer');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Admin secret key — change this to your own secret!
+const ADMIN_KEY = process.env.ADMIN_KEY || 'asquare-admin-2026';
+
 // --- Database Helpers ---
 const DB_PATH = path.join(__dirname, 'apps.json');
 
@@ -178,8 +181,14 @@ app.post('/api/apps/:id/download', (req, res) => {
     });
 });
 
-// DELETE /api/apps/:id - Delete an app
+// DELETE /api/apps/:id - Delete an app (ADMIN ONLY)
 app.delete('/api/apps/:id', (req, res) => {
+    // Verify admin key
+    const providedKey = req.headers['x-admin-key'];
+    if (providedKey !== ADMIN_KEY) {
+        return res.status(403).json({ error: 'Unauthorized. Admin key required.' });
+    }
+
     let apps = readDB();
     const appIndex = apps.findIndex(a => a.id === req.params.id);
 
@@ -188,6 +197,11 @@ app.delete('/api/apps/:id', (req, res) => {
     }
 
     const deleted = apps[appIndex];
+
+    // Prevent deletion of protected (seed) apps
+    if (deleted.protected) {
+        return res.status(403).json({ error: `"${deleted.name}" is a protected app and cannot be deleted.` });
+    }
 
     // Clean up files
     if (deleted.apkFile) {
