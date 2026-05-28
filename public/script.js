@@ -592,9 +592,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 uploadForm.style.display = 'none';
                 uploadSuccess.style.display = 'block';
                 document.getElementById('success-message').textContent =
-                    `"${newApp.name}" is now live on the ASquare Store!`;
+                    `"${newApp.name}" has been submitted for review! It will go live once audited and approved by the moderation team.`;
 
-                showToast('🎉', `${newApp.name} published successfully!`);
+                showToast('🎉', `${newApp.name} submitted for review!`);
                 renderAll();
 
             } catch (err) {

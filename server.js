@@ -75,23 +75,24 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // --- API Endpoints ---
 
-// GET /api/apps - Fetch all apps
+// GET /api/apps - Fetch all published apps
 app.get('/api/apps', (req, res) => {
     const apps = readDB();
-    res.json(apps);
+    const publishedApps = apps.filter(a => a.status === 'published');
+    res.json(publishedApps);
 });
 
-// GET /api/apps/:id - Fetch single app
+// GET /api/apps/:id - Fetch single published app
 app.get('/api/apps/:id', (req, res) => {
     const apps = readDB();
-    const app = apps.find(a => a.id === req.params.id);
+    const app = apps.find(a => a.id === req.params.id && a.status === 'published');
     if (!app) {
         return res.status(404).json({ error: 'App not found' });
     }
     res.json(app);
 });
 
-// POST /api/apps - Upload a new app
+// POST /api/apps - Upload a new app (Default: pending review)
 app.post('/api/apps', upload.fields([
     { name: 'apk', maxCount: 1 },
     { name: 'icon', maxCount: 1 }
@@ -128,7 +129,9 @@ app.post('/api/apps', upload.fields([
             reviews: [],
             screenshots: [],
             publishedAt: new Date().toISOString(),
-            featured: false
+            featured: false,
+            protected: false,
+            status: 'pending' // Uploaded apps must be reviewed and approved
         };
 
         // Handle APK file
@@ -152,7 +155,7 @@ app.post('/api/apps', upload.fields([
         apps.push(newApp);
         writeDB(apps);
 
-        console.log(`[STORE] New app published: "${name}" by ${developerName}`);
+        console.log(`[STORE] New app submitted for review: "${name}" by ${developerName}`);
         res.status(201).json(newApp);
 
     } catch (err) {
@@ -160,6 +163,39 @@ app.post('/api/apps', upload.fields([
         res.status(500).json({ error: 'Failed to publish app', message: err.message });
     }
 });
+
+// GET /api/admin/apps - Fetch all apps (including pending) for moderation
+app.get('/api/admin/apps', (req, res) => {
+    const providedKey = req.headers['x-admin-key'];
+    if (providedKey !== ADMIN_KEY) {
+        return res.status(403).json({ error: 'Unauthorized. Admin key required.' });
+    }
+    const apps = readDB();
+    res.json(apps);
+});
+
+// POST /api/admin/apps/:id/approve - Approve a pending app
+app.post('/api/admin/apps/:id/approve', (req, res) => {
+    const providedKey = req.headers['x-admin-key'];
+    if (providedKey !== ADMIN_KEY) {
+        return res.status(403).json({ error: 'Unauthorized. Admin key required.' });
+    }
+
+    let apps = readDB();
+    const appIndex = apps.findIndex(a => a.id === req.params.id);
+
+    if (appIndex === -1) {
+        return res.status(404).json({ error: 'App not found' });
+    }
+
+    apps[appIndex].status = 'published';
+    apps[appIndex].publishedAt = new Date().toISOString(); // Set release time to approval time
+    writeDB(apps);
+
+    console.log(`[STORE] App approved & published: "${apps[appIndex].name}"`);
+    res.json({ message: `"${apps[appIndex].name}" has been successfully published to ASquare Store!`, app: apps[appIndex] });
+});
+
 
 // POST /api/apps/:id/download - Increment download count
 app.post('/api/apps/:id/download', (req, res) => {
