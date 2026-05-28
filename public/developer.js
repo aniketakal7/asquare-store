@@ -234,53 +234,80 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==================
     // UPLOAD APP API
     // ==================
+    
+    // Global error handler for console debugging
+    window.addEventListener('error', (event) => {
+        console.error('[Console Critical Error]', event.error);
+        showToast('❌', `System Error: ${event.message}`);
+    });
+
     if (uploadForm) {
         uploadForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-
-            // Guard check for APK
-            if (!apkInput.files[0]) {
-                showToast('❌', 'Please attach an APK or project file.');
-                return;
-            }
-
-            const formData = new FormData();
-            formData.append('name', document.getElementById('app-name').value.trim());
-            formData.append('category', document.getElementById('app-category').value);
-            formData.append('version', document.getElementById('app-version').value.trim());
-            formData.append('summary', document.getElementById('app-summary').value.trim());
-            formData.append('description', document.getElementById('app-description').value.trim());
-            
-            // Set dynamic developer identifiers
-            formData.append('developerName', devName);
-            formData.append('developerId', devId);
-
-            // Icon: file or emoji
-            if (iconFileInput.files[0]) {
-                formData.append('icon', iconFileInput.files[0]);
-            }
-            formData.append('emojiIcon', selectedEmoji || '📦');
-
-            // APK
-            formData.append('apk', apkInput.files[0]);
-
-            // Disable buttons and show loading spinner
-            btnPublish.disabled = true;
-            btnPublish.querySelector('.btn-publish-text').style.display = 'none';
-            btnPublish.querySelector('.btn-publish-loading').style.display = 'inline-flex';
+            console.log('[Console Uploader] Submit event triggered');
 
             try {
+                // Guard check for APK
+                if (!apkInput.files || !apkInput.files[0]) {
+                    console.log('[Console Uploader] Guard check failed: No APK file');
+                    showToast('❌', 'Please attach an APK or project file.');
+                    return;
+                }
+
+                console.log('[Console Uploader] Preparing FormData...');
+                const formData = new FormData();
+                formData.append('name', document.getElementById('app-name').value.trim());
+                formData.append('category', document.getElementById('app-category').value);
+                formData.append('version', document.getElementById('app-version').value.trim());
+                formData.append('summary', document.getElementById('app-summary').value.trim());
+                formData.append('description', (document.getElementById('app-description').value || '').trim());
+                
+                // Set dynamic developer identifiers
+                formData.append('developerName', devName);
+                formData.append('developerId', devId);
+
+                // Icon: file or emoji
+                if (iconFileInput && iconFileInput.files && iconFileInput.files[0]) {
+                    console.log('[Console Uploader] Attaching icon file');
+                    formData.append('icon', iconFileInput.files[0]);
+                }
+                formData.append('emojiIcon', selectedEmoji || '📦');
+
+                // APK
+                console.log('[Console Uploader] Attaching APK file:', apkInput.files[0].name);
+                formData.append('apk', apkInput.files[0]);
+
+                // Disable buttons and show loading spinner
+                console.log('[Console Uploader] Setting button to loading state');
+                btnPublish.disabled = true;
+                const btnText = btnPublish.querySelector('.btn-publish-text');
+                const btnLoading = btnPublish.querySelector('.btn-publish-loading');
+                if (btnText) btnText.style.display = 'none';
+                if (btnLoading) btnLoading.style.display = 'inline-flex';
+
+                console.log('[Console Uploader] Sending POST request to /api/apps...');
                 const res = await fetch('/api/apps', {
                     method: 'POST',
                     body: formData
                 });
 
+                console.log('[Console Uploader] Fetch resolved. Status code:', res.status);
+
                 if (!res.ok) {
-                    const err = await res.json();
-                    throw new Error(err.error || 'Submission failed');
+                    let errorMessage = 'Submission failed';
+                    try {
+                        const err = await res.json();
+                        errorMessage = err.error || errorMessage;
+                    } catch (parseErr) {
+                        console.warn('[Console Uploader] Could not parse error response as JSON');
+                        const textErr = await res.text();
+                        errorMessage = textErr || errorMessage;
+                    }
+                    throw new Error(errorMessage);
                 }
 
                 const newApp = await res.json();
+                console.log('[Console Uploader] Success! Submitted app:', newApp.name);
                 allApps.push(newApp);
 
                 // Show success container
@@ -291,12 +318,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 renderMySubmissions();
 
             } catch (err) {
-                console.error('[Console] Upload failed:', err);
+                console.error('[Console Uploader] Submission process failed:', err);
                 showToast('❌', err.message || 'Failed to submit application.');
             } finally {
+                console.log('[Console Uploader] Resetting button state');
                 btnPublish.disabled = false;
-                btnPublish.querySelector('.btn-publish-text').style.display = '';
-                btnPublish.querySelector('.btn-publish-loading').style.display = 'none';
+                const btnText = btnPublish.querySelector('.btn-publish-text');
+                const btnLoading = btnPublish.querySelector('.btn-publish-loading');
+                if (btnText) btnText.style.display = '';
+                if (btnLoading) btnLoading.style.display = 'none';
             }
         });
     }
