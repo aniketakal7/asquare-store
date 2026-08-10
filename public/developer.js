@@ -246,6 +246,26 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             console.log('[Console Uploader] Submit event triggered');
 
+            // DOM elements
+            const btnText = btnPublish.querySelector('.btn-publish-text');
+            const btnLoading = btnPublish.querySelector('.btn-publish-loading');
+
+            function handleFailure(err) {
+                console.error('[Console Uploader] Submission process failed:', err);
+                showToast('❌', err.message || 'Failed to submit application.');
+                resetButtonState();
+            }
+
+            function resetButtonState() {
+                console.log('[Console Uploader] Resetting button state');
+                btnPublish.disabled = false;
+                if (btnText) btnText.style.display = '';
+                if (btnLoading) {
+                    btnLoading.style.display = 'none';
+                    btnLoading.innerHTML = `<span class="spinner"></span> Submitting...`; // reset text markup
+                }
+            }
+
             try {
                 // Guard check for APK
                 if (!apkInput.files || !apkInput.files[0]) {
@@ -280,53 +300,68 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Disable buttons and show loading spinner
                 console.log('[Console Uploader] Setting button to loading state');
                 btnPublish.disabled = true;
-                const btnText = btnPublish.querySelector('.btn-publish-text');
-                const btnLoading = btnPublish.querySelector('.btn-publish-loading');
                 if (btnText) btnText.style.display = 'none';
                 if (btnLoading) btnLoading.style.display = 'inline-flex';
 
-                console.log('[Console Uploader] Sending POST request to /api/apps...');
-                const res = await fetch('/api/apps', {
-                    method: 'POST',
-                    body: formData
+                console.log('[Console Uploader] Initializing XMLHttpRequest for upload progress tracking...');
+                const xhr = new XMLHttpRequest();
+
+                // Track Upload Progress Percent
+                xhr.upload.addEventListener('progress', (event) => {
+                    if (event.lengthComputable) {
+                        const percent = Math.round((event.loaded / event.total) * 100);
+                        console.log(`[Console Uploader] Progress: ${percent}%`);
+                        if (btnLoading) {
+                            btnLoading.innerHTML = `<span class="spinner"></span> Uploading... ${percent}%`;
+                        }
+                    }
                 });
 
-                console.log('[Console Uploader] Fetch resolved. Status code:', res.status);
+                // Request completed listener
+                xhr.addEventListener('load', () => {
+                    console.log('[Console Uploader] XMLHttpRequest load event. Status:', xhr.status);
+                    
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        try {
+                            const newApp = JSON.parse(xhr.responseText);
+                            console.log('[Console Uploader] Success! Submitted app:', newApp.name);
+                            allApps.push(newApp);
 
-                if (!res.ok) {
-                    let errorMessage = 'Submission failed';
-                    try {
-                        const err = await res.json();
-                        errorMessage = err.error || errorMessage;
-                    } catch (parseErr) {
-                        console.warn('[Console Uploader] Could not parse error response as JSON');
-                        const textErr = await res.text();
-                        errorMessage = textErr || errorMessage;
+                            // Show success container
+                            uploadForm.style.display = 'none';
+                            uploadSuccess.style.display = 'block';
+
+                            showToast('🎉', `${newApp.name} submitted for review!`);
+                            renderMySubmissions();
+                        } catch (parseErr) {
+                            handleFailure(new Error('Failed to parse upload response from server.'));
+                        }
+                    } else {
+                        let errorMessage = 'Submission failed';
+                        try {
+                            const errJson = JSON.parse(xhr.responseText);
+                            errorMessage = errJson.error || errorMessage;
+                        } catch (e) {
+                            errorMessage = xhr.responseText || errorMessage;
+                        }
+                        handleFailure(new Error(errorMessage));
                     }
-                    throw new Error(errorMessage);
-                }
+                });
 
-                const newApp = await res.json();
-                console.log('[Console Uploader] Success! Submitted app:', newApp.name);
-                allApps.push(newApp);
+                // Error listeners
+                xhr.addEventListener('error', () => {
+                    handleFailure(new Error('Network error. Check connection to local host.'));
+                });
 
-                // Show success container
-                uploadForm.style.display = 'none';
-                uploadSuccess.style.display = 'block';
+                xhr.addEventListener('abort', () => {
+                    handleFailure(new Error('Upload aborted by client.'));
+                });
 
-                showToast('🎉', `${newApp.name} submitted for review!`);
-                renderMySubmissions();
+                xhr.open('POST', '/api/apps');
+                xhr.send(formData);
 
             } catch (err) {
-                console.error('[Console Uploader] Submission process failed:', err);
-                showToast('❌', err.message || 'Failed to submit application.');
-            } finally {
-                console.log('[Console Uploader] Resetting button state');
-                btnPublish.disabled = false;
-                const btnText = btnPublish.querySelector('.btn-publish-text');
-                const btnLoading = btnPublish.querySelector('.btn-publish-loading');
-                if (btnText) btnText.style.display = '';
-                if (btnLoading) btnLoading.style.display = 'none';
+                handleFailure(err);
             }
         });
     }

@@ -1,5 +1,38 @@
 [
   {
+    "id": "ritika-ai",
+    "name": "Ritika AI",
+    "category": "Productivity",
+    "version": "1.0.0",
+    "summary": "Your personal AI companion. Local-first, private, powered by Gemini.",
+    "description": "Ritika AI is your intelligent personal companion designed for fast, private, and seamless conversations. Powered by Google Gemini, Ritika AI offers offline chat history stored in local SQLite database, stateful conversation management, rich markdown rendering, customizable AI personas, and full local control.",
+    "developerName": "ASquare Labs",
+    "icon": "🤖",
+    "iconFile": "uploads/icons/ritika-ai-icon.png",
+    "apkFile": "Ritika_AI_v1.0.0.apk",
+    "size": "64.9MB",
+    "downloads": 1240,
+    "rating": 4.9,
+    "reviews": [
+      {
+        "user": "Aniket K.",
+        "rating": 5,
+        "comment": "Incredible local AI companion! Very fast and private."
+      },
+      {
+        "user": "Ritika S.",
+        "rating": 5,
+        "comment": "Love the UI and seamless Gemini integration."
+      }
+    ],
+    "screenshots": [],
+    "publishedAt": "2026-08-11T00:00:00.000Z",
+    "featured": true,
+    "protected": false,
+    "status": "published",
+    "developerId": "system-admin"
+  },
+  {
     "id": "focusmate",
     "name": "FocusMate",
     "category": "Productivity",
