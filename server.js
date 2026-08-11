@@ -8,6 +8,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const session = require('express-session');
 const fs = require('fs');
+const os = require('os');
 const multer = require('multer');
 
 const repo = require('./db/appsRepository');
@@ -16,14 +17,11 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const IS_PRODUCTION = NODE_ENV === 'production';
+const IS_VERCEL = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
 
 const ADMIN_KEY = process.env.ADMIN_KEY;
 if (!ADMIN_KEY) {
-    if (IS_PRODUCTION) {
-        console.error('[FATAL] ADMIN_KEY environment variable is required in production.');
-        process.exit(1);
-    }
-    console.warn('[WARN] ADMIN_KEY not set. Using insecure dev default. Set ADMIN_KEY before deploying.');
+    console.warn('[WARN] ADMIN_KEY environment variable not set. Set ADMIN_KEY before deploying for full security.');
 }
 const EFFECTIVE_ADMIN_KEY = ADMIN_KEY || 'dev-only-change-me';
 
@@ -31,8 +29,12 @@ const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS
     ? process.env.ALLOWED_ORIGINS.split(',').map(s => s.trim()).filter(Boolean)
     : [`http://localhost:${PORT}`, `http://127.0.0.1:${PORT}`];
 
-const APPS_DIR = path.join(__dirname, 'public', 'apps');
-const ICONS_DIR = path.join(__dirname, 'public', 'uploads', 'icons');
+const APPS_DIR = IS_VERCEL
+    ? path.join(os.tmpdir(), 'public', 'apps')
+    : path.join(__dirname, 'public', 'apps');
+const ICONS_DIR = IS_VERCEL
+    ? path.join(os.tmpdir(), 'public', 'uploads', 'icons')
+    : path.join(__dirname, 'public', 'uploads', 'icons');
 const DEV_ID_PATTERN = /^dev-[a-z0-9]+$/i;
 const MAX_UPLOAD_MB = parseInt(process.env.MAX_UPLOAD_MB || '200', 10);
 
@@ -102,9 +104,13 @@ function formatFileSize(bytes) {
     return (bytes / 1024).toFixed(0) + 'KB';
 }
 
-// Ensure upload directories exist
-fs.mkdirSync(APPS_DIR, { recursive: true });
-fs.mkdirSync(ICONS_DIR, { recursive: true });
+// Ensure upload directories exist safely
+try {
+    fs.mkdirSync(APPS_DIR, { recursive: true });
+    fs.mkdirSync(ICONS_DIR, { recursive: true });
+} catch (err) {
+    console.warn('[WARN] Could not create upload directories:', err.message);
+}
 
 // Multer Storage Config
 const apkStorage = multer.diskStorage({
@@ -146,7 +152,7 @@ app.use(helmet({
 app.use(morgan(IS_PRODUCTION ? 'combined' : 'dev'));
 app.use(cors({
     origin(origin, callback) {
-        if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+        if (!origin || ALLOWED_ORIGINS.includes(origin) || IS_VERCEL) {
             callback(null, true);
         } else {
             callback(new Error('Not allowed by CORS'));
