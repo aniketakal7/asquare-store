@@ -64,6 +64,17 @@
             </div>
         </section>
 
+        <!-- Loading / Error states -->
+        <section class="store-status container" id="store-status" style="display:none;">
+            <div class="store-loading" id="store-loading">
+                <span class="spinner"></span> Loading apps...
+            </div>
+            <div class="store-error" id="store-error" style="display:none;">
+                <p>Could not load the store. Check your connection and try again.</p>
+                <button class="btn-install" id="store-retry-btn" type="button">Retry</button>
+            </div>
+        </section>
+
         <!-- Categories -->
         <section class="categories-section">
             <div class="container">
@@ -200,6 +211,24 @@
                 </div>
                 <div class="no-reviews" id="no-reviews" style="display:none;">
                     <p>No reviews yet. Be the first to try this app!</p>
+                </div>
+
+                <div class="add-review-form" id="add-review-container" style="margin-top: 16px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                    <h4 style="margin: 0 0 8px 0; font-size: 0.95rem; color: var(--text-main);">Write a Review</h4>
+                    <form id="review-form" style="display:flex; flex-direction:column; gap:8px;">
+                        <div style="display:flex; gap:8px;">
+                            <input type="text" id="review-user" placeholder="Your Name" required style="flex:1; padding:6px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.15); background:rgba(0,0,0,0.3); color:#fff;">
+                            <select id="review-rating" required style="padding:6px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.15); background:rgba(0,0,0,0.3); color:#fff;">
+                                <option value="5">★★★★★ (5)</option>
+                                <option value="4">★★★★☆ (4)</option>
+                                <option value="3">★★★☆☆ (3)</option>
+                                <option value="2">★★☆☆☆ (2)</option>
+                                <option value="1">★☆☆☆☆ (1)</option>
+                            </select>
+                        </div>
+                        <textarea id="review-comment" placeholder="What did you think of this app?" rows="2" style="padding:6px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.15); background:rgba(0,0,0,0.3); color:#fff; resize:vertical;"></textarea>
+                        <button type="submit" style="align-self:flex-end; padding:6px 16px; background:var(--accent); color:#fff; border:none; border-radius:6px; font-weight:600; cursor:pointer;">Submit Review</button>
+                    </form>
                 </div>
 
                 <div class="modal-footer-info">

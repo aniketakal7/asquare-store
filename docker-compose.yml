@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  asquare-store:
+    build: .
+    container_name: asquare-store
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - ADMIN_KEY=${ADMIN_KEY:-change-me-in-production}
+      - SESSION_SECRET=${SESSION_SECRET:-super-secret-session-key}
+    volumes:
+      - ./db:/app/db
+      - ./public/apps:/app/public/apps
+      - ./public/uploads:/app/public/uploads
+    restart: unless-stopped

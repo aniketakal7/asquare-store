@@ -1,2 +1,11 @@
 node_modules/
 .DS_Store
+.env
+*.tmp
+public/apps/*.apk
+!public/apps/.gitkeep
+public/uploads/icons/*
+!public/uploads/icons/.gitkeep
+db/*.db
+db/*.db-wal
+db/*.db-shm

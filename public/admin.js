@@ -34,9 +34,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==================
     // AUTH CHECK SYSTEM
     // ==================
-    if (adminKey) {
-        // Attempt auto-unlock
-        testAndUnlock(adminKey);
+    checkSessionOrKey();
+
+    async function checkSessionOrKey() {
+        try {
+            const sessRes = await fetch('/api/admin/session', { credentials: 'same-origin' });
+            const sessData = await sessRes.json();
+            if (sessData.loggedIn) {
+                authOverlay.style.display = 'none';
+                fetchAndRenderApps();
+                return;
+            }
+        } catch (_) {}
+
+        if (adminKey) {
+            testAndUnlock(adminKey);
+        }
     }
 
     authForm.addEventListener('submit', async (e) => {
@@ -54,35 +67,57 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    btnLogout.addEventListener('click', () => {
+    btnLogout.addEventListener('click', async () => {
+        try {
+            await fetch('/api/admin/logout', { method: 'POST', credentials: 'same-origin' });
+        } catch (_) {}
         sessionStorage.removeItem('asquare_admin_key');
         window.location.reload();
     });
 
     async function testAndUnlock(key) {
         try {
-            // Attempt to fetch using key
-            const res = await fetch('/api/admin/apps', {
-                headers: { 'x-admin-key': key }
+            const loginRes = await fetch('/api/admin/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ key }),
+                credentials: 'same-origin'
             });
 
-            if (!res.ok) {
+            if (!loginRes.ok) {
                 throw new Error('Access denied');
             }
 
-            // Key is valid! Save session and load console
             adminKey = key;
             sessionStorage.setItem('asquare_admin_key', key);
             authOverlay.style.display = 'none';
             showToast('🔓', 'Admin console unlocked.');
 
-            allApps = await res.json();
-            renderDashboard();
+            await fetchAndRenderApps();
             return true;
 
         } catch (err) {
             console.error('[Console] Auth failed:', err);
             return false;
+        }
+    }
+
+    async function fetchAndRenderApps() {
+        try {
+            const headers = {};
+            if (adminKey) headers['x-admin-key'] = adminKey;
+
+            const res = await fetch('/api/admin/apps', {
+                headers,
+                credentials: 'same-origin'
+            });
+
+            if (!res.ok) throw new Error('Failed to load apps');
+
+            allApps = await res.json();
+            renderDashboard();
+        } catch (err) {
+            showToast('❌', err.message);
         }
     }
 
@@ -181,17 +216,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.textContent = 'Publishing...';
 
                 try {
+                    const headers = {};
+                    if (adminKey) headers['x-admin-key'] = adminKey;
+
                     const res = await fetch(`/api/admin/apps/${id}/approve`, {
                         method: 'POST',
-                        headers: { 'x-admin-key': adminKey }
+                        headers,
+                        credentials: 'same-origin'
                     });
 
                     if (res.ok) {
-                        const data = await res.json();
                         showToast('✅', `"${app.name}" published successfully!`);
-                        // Refresh data
-                        allApps = allApps.map(a => a.id === id ? { ...a, status: 'published' } : a);
-                        renderDashboard();
+                        await fetchAndRenderApps();
                     } else {
                         throw new Error('Approval request failed');
                     }
@@ -203,25 +239,30 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // Reject Button
+        // Reject Button with Reason
         pendingQueueList.querySelectorAll('[data-reject-id]').forEach(btn => {
             btn.addEventListener('click', async () => {
                 const id = btn.dataset.rejectId;
                 const app = allApps.find(a => a.id === id);
                 if (!app) return;
 
-                if (!confirm(`Reject submission "${app.name}"? This deletes the app metadata and uploaded files.`)) return;
+                const reason = prompt(`Enter rejection reason for "${app.name}":`, 'APK failed safety checks or policy guidelines.');
+                if (reason === null) return; // User cancelled
 
                 try {
-                    const res = await fetch(`/api/apps/${id}`, {
-                        method: 'DELETE',
-                        headers: { 'x-admin-key': adminKey }
+                    const headers = { 'Content-Type': 'application/json' };
+                    if (adminKey) headers['x-admin-key'] = adminKey;
+
+                    const res = await fetch(`/api/admin/apps/${id}/reject`, {
+                        method: 'POST',
+                        headers,
+                        body: JSON.stringify({ reason: reason.trim() }),
+                        credentials: 'same-origin'
                     });
 
                     if (res.ok) {
-                        showToast('🗑️', `"${app.name}" submission rejected and deleted.`);
-                        allApps = allApps.filter(a => a.id !== id);
-                        renderDashboard();
+                        showToast('❌', `"${app.name}" submission rejected.`);
+                        await fetchAndRenderApps();
                     } else {
                         throw new Error('Rejection request failed');
                     }
@@ -243,15 +284,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!confirm(`Take down "${app.name}" from public listing? This removes it from the store catalog.`)) return;
 
                 try {
+                    const headers = {};
+                    if (adminKey) headers['x-admin-key'] = adminKey;
+
                     const res = await fetch(`/api/apps/${id}`, {
                         method: 'DELETE',
-                        headers: { 'x-admin-key': adminKey }
+                        headers,
+                        credentials: 'same-origin'
                     });
 
                     if (res.ok) {
                         showToast('🚫', `"${app.name}" taken down from ASquare Store.`);
-                        allApps = allApps.filter(a => a.id !== id);
-                        renderDashboard();
+                        await fetchAndRenderApps();
                     } else {
                         throw new Error('Takedown request failed');
                     }

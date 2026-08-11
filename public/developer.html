@@ -445,6 +445,40 @@
         </section>
     </main>
 
+    <!-- Edit App Modal -->
+    <div class="onboard-overlay" id="edit-app-overlay" style="display: none;">
+        <div class="onboard-card glass" style="max-width: 540px; text-align: left;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 1rem;">
+                <h3 style="margin: 0; font-size: 1.4rem;">✏️ Edit App & Update Icon</h3>
+                <button type="button" id="btn-close-edit" style="background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer;">&times;</button>
+            </div>
+            <form id="edit-app-form">
+                <input type="hidden" id="edit-app-id">
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:4px;">App Version</label>
+                    <input type="text" id="edit-app-version" placeholder="1.1.0" required style="width:100%; padding:10px; background:rgba(0,0,0,0.3); border:1px solid var(--glass-border); border-radius:6px; color:#fff;">
+                </div>
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:4px;">Short Summary</label>
+                    <input type="text" id="edit-app-summary" required style="width:100%; padding:10px; background:rgba(0,0,0,0.3); border:1px solid var(--glass-border); border-radius:6px; color:#fff;">
+                </div>
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:4px;">App Icon (Emoji or Upload Image)</label>
+                    <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                        <input type="text" id="edit-app-emoji" placeholder="Emoji (e.g. 🚀)" style="width:120px; padding:10px; background:rgba(0,0,0,0.3); border:1px solid var(--glass-border); border-radius:6px; color:#fff; font-size:1.2rem; text-align:center;">
+                        <span>or upload custom image:</span>
+                        <input type="file" id="edit-app-icon-file" accept="image/*" style="font-size:0.85rem;">
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:4px;">Optional New APK File</label>
+                    <input type="file" id="edit-app-apk-file" accept=".apk" style="font-size:0.85rem;">
+                </div>
+                <button type="submit" class="btn-onboard-submit" id="btn-save-edit">Save Changes & Update Icon</button>
+            </form>
+        </div>
+    </div>
+
     <!-- Toast message overlay -->
     <div id="toast" class="toast">
         <span id="toast-icon">✅</span>

@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ---- Onboarding / Session State ----
     let devName = localStorage.getItem('asquare_dev_name') || '';
     let devId = localStorage.getItem('asquare_dev_id') || '';
+    let devToken = localStorage.getItem('asquare_dev_token') || '';
     let allApps = [];
 
     // ---- DOM References ----
@@ -46,54 +47,76 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==================
     // SESSION MANAGER
     // ==================
-    if (!devId || !devName) {
-        // First visit - display onboarding screen
+    if (!devId || !devName || !devToken) {
+        // First visit or unauthenticated - display onboarding screen
         onboardOverlay.style.display = 'flex';
     } else {
         initializeConsole();
     }
 
-    onboardForm.addEventListener('submit', (e) => {
+    async function registerAccount(name) {
+        try {
+            const res = await fetch('/api/developer/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name })
+            });
+
+            if (!res.ok) {
+                const errData = await res.json();
+                throw new Error(errData.error || 'Registration failed');
+            }
+
+            const data = await res.json();
+            localStorage.setItem('asquare_dev_name', data.name);
+            localStorage.setItem('asquare_dev_id', data.developerId);
+            localStorage.setItem('asquare_dev_token', data.token);
+
+            devName = data.name;
+            devId = data.developerId;
+            devToken = data.token;
+
+            return true;
+        } catch (err) {
+            showToast('❌', err.message);
+            return false;
+        }
+    }
+
+    onboardForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const inputName = devProfileNameInput.value.trim();
         if (!inputName) return;
 
-        // Generate custom Dev ID
-        const randomId = 'dev-' + Math.random().toString(36).substring(2, 8) + Math.floor(Math.random() * 1000).toString();
-        
-        localStorage.setItem('asquare_dev_name', inputName);
-        localStorage.setItem('asquare_dev_id', randomId);
-
-        devName = inputName;
-        devId = randomId;
-
-        onboardOverlay.style.display = 'none';
-        showToast('🎉', 'Developer Workspace created successfully!');
-        initializeConsole();
+        const success = await registerAccount(inputName);
+        if (success) {
+            onboardOverlay.style.display = 'none';
+            showToast('🎉', 'Developer Workspace created successfully!');
+            initializeConsole();
+        }
     });
 
-    btnSwitchProfile.addEventListener('click', () => {
-        const newName = prompt('Enter your new Developer / Studio Name:', devName);
+    btnSwitchProfile.addEventListener('click', async () => {
+        const newName = prompt('Enter your new Developer / Studio Name to create a new profile:', devName);
         if (newName === null) return;
         if (!newName.trim()) {
             showToast('❌', 'Developer Name cannot be empty.');
             return;
         }
 
-        localStorage.setItem('asquare_dev_name', newName.trim());
-        devName = newName.trim();
-        displayDevName.textContent = devName;
-        showToast('✏️', 'Developer Profile updated.');
-        
-        // Update all existing items in state
-        allApps.forEach(a => a.developerName = devName);
-        renderMySubmissions();
+        const success = await registerAccount(newName.trim());
+        if (success) {
+            displayDevName.textContent = devName;
+            displayDevId.textContent = `Developer ID: ${devId}`;
+            showToast('✨', 'Switched to new Developer Profile.');
+            fetchMyApps();
+        }
     });
 
     function initializeConsole() {
         displayDevName.textContent = devName;
         displayDevId.textContent = `Developer ID: ${devId}`;
-        appDeveloperHidden.value = devName; // Set hidden developerName field
+        if (appDeveloperHidden) appDeveloperHidden.value = devName;
         fetchMyApps();
     }
 
@@ -102,7 +125,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==================
     async function fetchMyApps() {
         try {
-            const res = await fetch(`/api/developer/apps?developerId=${devId}`);
+            const headers = {};
+            if (devToken) headers['x-dev-token'] = devToken;
+
+            const res = await fetch(`/api/developer/apps?developerId=${devId}`, { headers });
             if (res.ok) {
                 allApps = await res.json();
                 renderMySubmissions();
@@ -141,29 +167,51 @@ document.addEventListener('DOMContentLoaded', () => {
                 ? `<img src="${app.iconFile}" alt="${app.name}">`
                 : (app.icon || '📦');
 
-            const statusClass = app.status === 'published' ? 'status-published' : 'status-pending';
-            const statusLabel = app.status === 'published' ? '🟢 Published' : '⏳ In Review';
+            let statusClass = 'status-pending';
+            let statusLabel = '⏳ In Review';
+
+            if (app.status === 'published') {
+                statusClass = 'status-published';
+                statusLabel = '🟢 Published';
+            } else if (app.status === 'rejected') {
+                statusClass = 'status-rejected';
+                statusLabel = '❌ Rejected';
+            }
+
+            const rejectionMsg = app.status === 'rejected' && app.rejectionReason
+                ? `<div style="font-size:0.8rem; color:#ef4444; margin-top:4px;">Reason: ${escapeHTML(app.rejectionReason)}</div>`
+                : '';
 
             return `
                 <div class="my-upload-item" data-app-id="${app.id}">
                      <div class="my-upload-icon">${iconContent}</div>
-                     <div class="my-upload-info">
-                         <div class="my-upload-name" style="display:flex; align-items:center; gap:8px;">
-                             <span>${escapeHTML(app.name)}</span>
+                     <div class="my-upload-info" style="flex:1;">
+                         <div class="my-upload-name" style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+                             <span style="font-weight:700;">${escapeHTML(app.name)}</span>
                              <span class="status-badge ${statusClass}">${statusLabel}</span>
                          </div>
                          <div class="my-upload-meta">v${app.version} • ${formatNumber(app.downloads)} installs</div>
+                         ${rejectionMsg}
                      </div>
+                     <button type="button" class="btn-edit-app" data-edit-id="${app.id}" style="background:rgba(255,255,255,0.08); border:1px solid var(--glass-border); color:#fff; padding:6px 12px; border-radius:6px; font-size:0.8rem; cursor:pointer; font-weight:600;">✏️ Edit Icon</button>
                 </div>
             `;
         }).join('');
+
+        // Bind Edit buttons
+        myUploadsList.querySelectorAll('[data-edit-id]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const appId = btn.dataset.editId;
+                const app = allApps.find(a => a.id === appId);
+                if (app) openEditModal(app);
+            });
+        });
     }
 
     // ==================
     // FORM FILE SELECTION
     // ==================
 
-    // Emoji picker
     let selectedEmoji = '📦';
     if (emojiPicker) {
         emojiPicker.addEventListener('click', (e) => {
@@ -173,25 +221,21 @@ document.addEventListener('DOMContentLoaded', () => {
             option.classList.add('selected');
             selectedEmoji = option.dataset.emoji;
 
-            // Deselect icon file if emoji is picked
             if (iconFileInput) iconFileInput.value = '';
             if (iconFilename) iconFilename.textContent = '';
         });
     }
 
-    // Icon file uploader mini
     if (iconFileInput) {
         iconFileInput.addEventListener('change', () => {
             if (iconFileInput.files[0]) {
                 iconFilename.textContent = iconFileInput.files[0].name;
-                // Deselect emoji picker
-                emojiPicker.querySelectorAll('.emoji-option').forEach(o => o.classList.remove('selected'));
+                if (emojiPicker) emojiPicker.querySelectorAll('.emoji-option').forEach(o => o.classList.remove('selected'));
                 selectedEmoji = null;
             }
         });
     }
 
-    // Drag-and-drop Dropzone
     if (dropzone) {
         dropzone.addEventListener('click', () => apkInput.click());
 
@@ -235,7 +279,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // UPLOAD APP API
     // ==================
     
-    // Global error handler for console debugging
     window.addEventListener('error', (event) => {
         console.error('[Console Critical Error]', event.error);
         showToast('❌', `System Error: ${event.message}`);
@@ -244,9 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (uploadForm) {
         uploadForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            console.log('[Console Uploader] Submit event triggered');
 
-            // DOM elements
             const btnText = btnPublish.querySelector('.btn-publish-text');
             const btnLoading = btnPublish.querySelector('.btn-publish-loading');
 
@@ -257,77 +298,56 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             function resetButtonState() {
-                console.log('[Console Uploader] Resetting button state');
                 btnPublish.disabled = false;
                 if (btnText) btnText.style.display = '';
                 if (btnLoading) {
                     btnLoading.style.display = 'none';
-                    btnLoading.innerHTML = `<span class="spinner"></span> Submitting...`; // reset text markup
+                    btnLoading.innerHTML = `<span class="spinner"></span> Submitting...`;
                 }
             }
 
             try {
-                // Guard check for APK
                 if (!apkInput.files || !apkInput.files[0]) {
-                    console.log('[Console Uploader] Guard check failed: No APK file');
-                    showToast('❌', 'Please attach an APK or project file.');
+                    showToast('❌', 'Please attach an APK file.');
                     return;
                 }
 
-                console.log('[Console Uploader] Preparing FormData...');
                 const formData = new FormData();
                 formData.append('name', document.getElementById('app-name').value.trim());
                 formData.append('category', document.getElementById('app-category').value);
                 formData.append('version', document.getElementById('app-version').value.trim());
                 formData.append('summary', document.getElementById('app-summary').value.trim());
                 formData.append('description', (document.getElementById('app-description').value || '').trim());
-                
-                // Set dynamic developer identifiers
                 formData.append('developerName', devName);
                 formData.append('developerId', devId);
 
-                // Icon: file or emoji
                 if (iconFileInput && iconFileInput.files && iconFileInput.files[0]) {
-                    console.log('[Console Uploader] Attaching icon file');
                     formData.append('icon', iconFileInput.files[0]);
                 }
                 formData.append('emojiIcon', selectedEmoji || '📦');
-
-                // APK
-                console.log('[Console Uploader] Attaching APK file:', apkInput.files[0].name);
                 formData.append('apk', apkInput.files[0]);
 
-                // Disable buttons and show loading spinner
-                console.log('[Console Uploader] Setting button to loading state');
                 btnPublish.disabled = true;
                 if (btnText) btnText.style.display = 'none';
                 if (btnLoading) btnLoading.style.display = 'inline-flex';
 
-                console.log('[Console Uploader] Initializing XMLHttpRequest for upload progress tracking...');
                 const xhr = new XMLHttpRequest();
 
-                // Track Upload Progress Percent
                 xhr.upload.addEventListener('progress', (event) => {
                     if (event.lengthComputable) {
                         const percent = Math.round((event.loaded / event.total) * 100);
-                        console.log(`[Console Uploader] Progress: ${percent}%`);
                         if (btnLoading) {
                             btnLoading.innerHTML = `<span class="spinner"></span> Uploading... ${percent}%`;
                         }
                     }
                 });
 
-                // Request completed listener
                 xhr.addEventListener('load', () => {
-                    console.log('[Console Uploader] XMLHttpRequest load event. Status:', xhr.status);
-                    
                     if (xhr.status >= 200 && xhr.status < 300) {
                         try {
                             const newApp = JSON.parse(xhr.responseText);
-                            console.log('[Console Uploader] Success! Submitted app:', newApp.name);
                             allApps.push(newApp);
 
-                            // Show success container
                             uploadForm.style.display = 'none';
                             uploadSuccess.style.display = 'block';
 
@@ -348,16 +368,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
 
-                // Error listeners
                 xhr.addEventListener('error', () => {
-                    handleFailure(new Error('Network error. Check connection to local host.'));
-                });
-
-                xhr.addEventListener('abort', () => {
-                    handleFailure(new Error('Upload aborted by client.'));
+                    handleFailure(new Error('Network error. Check connection.'));
                 });
 
                 xhr.open('POST', '/api/apps');
+                if (devToken) xhr.setRequestHeader('x-dev-token', devToken);
                 xhr.send(formData);
 
             } catch (err) {
@@ -366,7 +382,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Submit Another App
     if (btnAnother) {
         btnAnother.addEventListener('click', () => {
             uploadForm.reset();
@@ -376,16 +391,84 @@ document.addEventListener('DOMContentLoaded', () => {
             iconFilename.textContent = '';
             selectedEmoji = '📦';
 
-            // Reset emoji selections
-            emojiPicker.querySelectorAll('.emoji-option').forEach(o => o.classList.remove('selected'));
-            emojiPicker.querySelector('[data-emoji="📦"]')?.classList.add('selected');
+            if (emojiPicker) {
+                emojiPicker.querySelectorAll('.emoji-option').forEach(o => o.classList.remove('selected'));
+                emojiPicker.querySelector('[data-emoji="📦"]')?.classList.add('selected');
+            }
 
-            // Reset dropzone markup
             document.getElementById('dropzone-content').innerHTML = `
                 <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                 <p>Drag & drop your APK here</p>
                 <span>or <strong>click to browse</strong></span>
             `;
+        });
+    }
+
+    // ==================
+    // EDIT APP MODAL LOGIC
+    // ==================
+    const editOverlay = document.getElementById('edit-app-overlay');
+    const editForm = document.getElementById('edit-app-form');
+    const btnCloseEdit = document.getElementById('btn-close-edit');
+
+    function openEditModal(app) {
+        document.getElementById('edit-app-id').value = app.id;
+        document.getElementById('edit-app-version').value = app.version || '1.0.0';
+        document.getElementById('edit-app-summary').value = app.summary || '';
+        document.getElementById('edit-app-emoji').value = app.icon || '📦';
+        document.getElementById('edit-app-icon-file').value = '';
+        document.getElementById('edit-app-apk-file').value = '';
+        editOverlay.style.display = 'flex';
+    }
+
+    if (btnCloseEdit) {
+        btnCloseEdit.addEventListener('click', () => editOverlay.style.display = 'none');
+    }
+
+    if (editForm) {
+        editForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const appId = document.getElementById('edit-app-id').value;
+            const version = document.getElementById('edit-app-version').value.trim();
+            const summary = document.getElementById('edit-app-summary').value.trim();
+            const emojiIcon = document.getElementById('edit-app-emoji').value.trim();
+
+            const iconFileInput = document.getElementById('edit-app-icon-file');
+            const apkFileInput = document.getElementById('edit-app-apk-file');
+
+            const formData = new FormData();
+            formData.append('version', version);
+            formData.append('summary', summary);
+            if (emojiIcon) formData.append('emojiIcon', emojiIcon);
+
+            if (iconFileInput && iconFileInput.files[0]) {
+                formData.append('icon', iconFileInput.files[0]);
+            }
+            if (apkFileInput && apkFileInput.files[0]) {
+                formData.append('apk', apkFileInput.files[0]);
+            }
+
+            try {
+                const headers = {};
+                if (devToken) headers['x-dev-token'] = devToken;
+
+                const res = await fetch(`/api/apps/${appId}`, {
+                    method: 'PUT',
+                    headers,
+                    body: formData
+                });
+
+                if (!res.ok) {
+                    const err = await res.json();
+                    throw new Error(err.error || 'Failed to update app');
+                }
+
+                showToast('✨', 'App icon & details updated successfully!');
+                editOverlay.style.display = 'none';
+                fetchMyApps();
+            } catch (err) {
+                showToast('❌', err.message);
+            }
         });
     }
 

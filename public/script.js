@@ -108,15 +108,45 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==================
     // FETCH APPS
     // ==================
+    const storeStatus = document.getElementById('store-status');
+    const storeLoading = document.getElementById('store-loading');
+    const storeError = document.getElementById('store-error');
+    const storeRetryBtn = document.getElementById('store-retry-btn');
+
     async function fetchApps() {
+        if (storeStatus) {
+            storeStatus.style.display = 'block';
+            storeLoading.style.display = 'block';
+            storeError.style.display = 'none';
+        }
         try {
             const res = await fetch('/api/apps');
+            if (!res.ok) throw new Error('API error');
             allApps = await res.json();
+            if (storeStatus) storeStatus.style.display = 'none';
+            renderAll();
+            openAppFromQuery();
         } catch (err) {
-            console.warn('Could not fetch from API, using empty list.');
+            console.warn('Could not fetch from API:', err);
             allApps = [];
+            if (storeStatus) {
+                storeLoading.style.display = 'none';
+                storeError.style.display = 'block';
+            }
+            renderAll();
         }
-        renderAll();
+    }
+
+    function openAppFromQuery() {
+        const params = new URLSearchParams(window.location.search);
+        const appId = params.get('app');
+        if (!appId) return;
+        const app = allApps.find(a => a.id === appId);
+        if (app) openModal(app);
+    }
+
+    if (storeRetryBtn) {
+        storeRetryBtn.addEventListener('click', fetchApps);
     }
 
     function renderAll() {
@@ -145,7 +175,14 @@ document.addEventListener('DOMContentLoaded', () => {
         featuredDownloads.textContent = formatNumber(featured.downloads);
         featuredSize.textContent = featured.size || 'N/A';
 
-        featuredInstallBtn.onclick = () => openModal(featured);
+        featuredInstallBtn.onclick = (e) => {
+            e.stopPropagation();
+            if (featured.apkFile) {
+                downloadApp(featured);
+            } else {
+                openModal(featured);
+            }
+        };
         featuredBanner.onclick = (e) => {
             if (e.target !== featuredInstallBtn) openModal(featured);
         };
@@ -362,14 +399,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Share button
         document.getElementById('modal-share-btn').onclick = () => {
+            const shareUrl = `${window.location.origin}${window.location.pathname}?app=${encodeURIComponent(app.id)}`;
             if (navigator.share) {
                 navigator.share({
                     title: app.name,
                     text: app.summary,
-                    url: window.location.href
+                    url: shareUrl
                 });
             } else {
-                navigator.clipboard.writeText(window.location.href);
+                navigator.clipboard.writeText(shareUrl);
                 showToast('🔗', 'Link copied to clipboard!');
             }
         };
@@ -392,6 +430,55 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             reviewsContainer.style.display = 'none';
             noReviews.style.display = '';
+        }
+
+        // Review Form Listener
+        const reviewForm = document.getElementById('review-form');
+        if (reviewForm) {
+            reviewForm.onsubmit = async (e) => {
+                e.preventDefault();
+                if (!currentModalApp) return;
+
+                const userInput = document.getElementById('review-user');
+                const ratingInput = document.getElementById('review-rating');
+                const commentInput = document.getElementById('review-comment');
+
+                const user = userInput.value.trim();
+                const rating = parseInt(ratingInput.value, 10);
+                const comment = commentInput.value.trim();
+
+                try {
+                    const res = await fetch(`/api/apps/${currentModalApp.id}/reviews`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ user, rating, comment })
+                    });
+
+                    if (!res.ok) {
+                        const err = await res.json();
+                        throw new Error(err.error || 'Failed to submit review');
+                    }
+
+                    const data = await res.json();
+                    showToast('⭐', 'Thank you for your review!');
+
+                    // Update app object and modal display
+                    const updatedApp = data.app;
+                    currentModalApp = updatedApp;
+
+                    const targetInAll = allApps.find(a => a.id === updatedApp.id);
+                    if (targetInAll) {
+                        targetInAll.rating = updatedApp.rating;
+                        targetInAll.reviews = updatedApp.reviews;
+                    }
+
+                    document.getElementById('modal-rating').textContent = updatedApp.rating ? updatedApp.rating.toFixed(1) : '—';
+                    openModal(updatedApp);
+                    reviewForm.reset();
+                } catch (err) {
+                    showToast('❌', err.message);
+                }
+            };
         }
 
         modalOverlay.classList.add('active');
@@ -423,36 +510,33 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==================
     async function downloadApp(app) {
         try {
-            // Increment download count on server
             const res = await fetch(`/api/apps/${app.id}/download`, { method: 'POST' });
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                throw new Error(err.error || 'Download failed');
+            }
             const data = await res.json();
 
-            // Update local data
             const localApp = allApps.find(a => a.id === app.id);
             if (localApp) localApp.downloads = data.downloads;
 
-            // Trigger file download
-            if (app.apkFile) {
-                const link = document.createElement('a');
-                link.href = `apps/${app.apkFile}`;
-                link.download = app.name.replace(/\s+/g, '_') + '.apk';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            }
+            const downloadUrl = data.downloadUrl || `/download/${app.apkFile}`;
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.download = app.name.replace(/\s+/g, '_') + '.apk';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
 
             showToast('📥', `Downloading ${app.name}...`);
-
-            // Refresh UI
             renderAll();
 
-            // Update modal if open
             if (currentModalApp && currentModalApp.id === app.id) {
                 document.getElementById('modal-downloads').textContent = formatNumber(data.downloads);
             }
         } catch (err) {
             console.error('Download error:', err);
-            showToast('❌', 'Download failed. Please try again.');
+            showToast('❌', err.message || 'Download failed. Please try again.');
         }
     }
 

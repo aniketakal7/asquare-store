@@ -100,7 +100,7 @@
     "publishedAt": "2026-04-15T00:00:00.000Z",
     "featured": false,
     "protected": true,
-    "status": "published",
+    "status": "unlisted",
     "developerId": "system-admin"
   },
   {
@@ -133,7 +133,7 @@
     "publishedAt": "2026-03-10T00:00:00.000Z",
     "featured": true,
     "protected": true,
-    "status": "published",
+    "status": "unlisted",
     "developerId": "system-admin"
   },
   {
@@ -166,7 +166,7 @@
     "publishedAt": "2026-02-28T00:00:00.000Z",
     "featured": false,
     "protected": true,
-    "status": "published",
+    "status": "unlisted",
     "developerId": "system-admin"
   },
   {
@@ -199,7 +199,7 @@
     "publishedAt": "2026-04-01T00:00:00.000Z",
     "featured": false,
     "protected": true,
-    "status": "published",
+    "status": "unlisted",
     "developerId": "system-admin"
   },
   {
@@ -232,7 +232,7 @@
     "publishedAt": "2026-01-20T00:00:00.000Z",
     "featured": false,
     "protected": true,
-    "status": "published",
+    "status": "unlisted",
     "developerId": "system-admin"
   }
 ]
