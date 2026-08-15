@@ -61,10 +61,9 @@ document.addEventListener('DOMContentLoaded', () => {
         tabs.forEach(t => t.classList.remove('active'));
         pages.forEach(p => p.classList.remove('active'));
 
-        const targetTab = document.querySelector(`[data-tab="${tabName}"]`);
+        document.querySelectorAll(`[data-tab="${tabName}"]`).forEach(t => t.classList.add('active'));
         const targetPage = document.getElementById(`page-${tabName}`);
 
-        if (targetTab) targetTab.classList.add('active');
         if (targetPage) {
             targetPage.classList.add('active');
             // Re-trigger animation

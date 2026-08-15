@@ -161,45 +161,70 @@
     </main>
 
 
-    <!-- ============ APP DETAIL MODAL ============ -->
+    <!-- ============ MOBILE BOTTOM NAVIGATION ============ -->
+    <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Mobile Navigation">
+        <button class="mobile-nav-item active nav-tab" data-tab="discover" id="mobile-tab-discover">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+            <span>Discover</span>
+        </button>
+        <button class="mobile-nav-item nav-tab" data-tab="browse" id="mobile-tab-browse">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            <span>Browse</span>
+        </button>
+        <a href="developer.html" class="mobile-nav-item" id="mobile-tab-console">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></svg>
+            <span>Console</span>
+        </a>
+    </nav>
+
+    <!-- ============ APP DETAIL MODAL (GEOMETRIC POPUP) ============ -->
     <div class="modal-overlay" id="modal-overlay">
-        <div class="modal-content glass" id="modal-content">
-            <button class="modal-close" id="modal-close">&times;</button>
+        <div class="modal-content glass geometric-modal" id="modal-content">
+            <!-- Geometric Tech HUD Accents -->
+            <div class="geo-corner-bracket geo-tl"></div>
+            <div class="geo-corner-bracket geo-tr"></div>
+            <div class="geo-corner-bracket geo-bl"></div>
+            <div class="geo-corner-bracket geo-br"></div>
+            <div class="geo-glow-line top"></div>
+            <div class="geo-glow-line bottom"></div>
+            <div class="geo-hud-tag"><span>SYS // ASQUARE PKG</span></div>
+
+            <button class="modal-close geo-close" id="modal-close" aria-label="Close dialog">&times;</button>
             <div class="modal-header">
-                <div class="modal-icon" id="modal-icon">📦</div>
+                <div class="modal-icon geo-icon-frame" id="modal-icon">📦</div>
                 <div class="modal-title-area">
                     <h2 id="modal-name">App Name</h2>
                     <p class="modal-developer" id="modal-developer">Developer</p>
                     <div class="modal-badges">
-                        <span class="badge-category" id="modal-category">Category</span>
-                        <span class="badge-version" id="modal-version">v1.0.0</span>
+                        <span class="badge-category geo-pill" id="modal-category">Category</span>
+                        <span class="badge-version geo-pill" id="modal-version">v1.0.0</span>
                     </div>
                 </div>
             </div>
-            <div class="modal-stats">
-                <div class="stat">
+            <div class="modal-stats geo-stats-grid">
+                <div class="stat geo-stat-cell">
                     <span class="stat-value" id="modal-rating">4.5</span>
                     <span class="stat-label">Rating</span>
                 </div>
-                <div class="stat-divider"></div>
-                <div class="stat">
+                <div class="stat-divider geo-stat-divider"></div>
+                <div class="stat geo-stat-cell">
                     <span class="stat-value" id="modal-downloads">0</span>
                     <span class="stat-label">Downloads</span>
                 </div>
-                <div class="stat-divider"></div>
-                <div class="stat">
+                <div class="stat-divider geo-stat-divider"></div>
+                <div class="stat geo-stat-cell">
                     <span class="stat-value" id="modal-size">N/A</span>
                     <span class="stat-label">Size</span>
                 </div>
             </div>
-            <div class="modal-actions">
-                <button class="btn-modal-install" id="modal-install-btn">
+            <div class="modal-actions geo-actions">
+                <button class="btn-modal-install geo-btn-install" id="modal-install-btn">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    Install
+                    <span>Install</span>
                 </button>
-                <button class="btn-modal-secondary" id="modal-share-btn">
+                <button class="btn-modal-secondary geo-btn-secondary" id="modal-share-btn">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-                    Share
+                    <span>Share</span>
                 </button>
             </div>
             <div class="modal-body">
@@ -211,12 +236,12 @@
                     <p>No reviews yet. Be the first to try this app!</p>
                 </div>
 
-                <div class="add-review-form" id="add-review-container" style="margin-top: 16px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px;">
-                    <h4 style="margin: 0 0 8px 0; font-size: 0.95rem; color: var(--text-main);">Write a Review</h4>
-                    <form id="review-form" style="display:flex; flex-direction:column; gap:8px;">
-                        <div style="display:flex; gap:8px;">
-                            <input type="text" id="review-user" placeholder="Your Name" required style="flex:1; padding:6px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.15); background:rgba(0,0,0,0.3); color:#fff;">
-                            <select id="review-rating" required style="padding:6px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.15); background:rgba(0,0,0,0.3); color:#fff;">
+                <div class="add-review-form geo-review-form" id="add-review-container">
+                    <h4>Write a Review</h4>
+                    <form id="review-form">
+                        <div class="form-review-row">
+                            <input type="text" id="review-user" placeholder="Your Name" required>
+                            <select id="review-rating" required>
                                 <option value="5">★★★★★ (5)</option>
                                 <option value="4">★★★★☆ (4)</option>
                                 <option value="3">★★★☆☆ (3)</option>
@@ -224,14 +249,14 @@
                                 <option value="1">★☆☆☆☆ (1)</option>
                             </select>
                         </div>
-                        <textarea id="review-comment" placeholder="What did you think of this app?" rows="2" style="padding:6px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.15); background:rgba(0,0,0,0.3); color:#fff; resize:vertical;"></textarea>
-                        <button type="submit" style="align-self:flex-end; padding:6px 16px; background:var(--accent); color:#fff; border:none; border-radius:6px; font-weight:600; cursor:pointer;">Submit Review</button>
+                        <textarea id="review-comment" placeholder="What did you think of this app?" rows="2"></textarea>
+                        <button type="submit" class="btn-review-submit geo-btn-submit">Submit Review</button>
                     </form>
                 </div>
 
                 <div class="modal-footer-info">
                     <p>Published: <span id="modal-published">-</span></p>
-                    <p class="verified-badge">✓ Verified by ASquare</p>
+                    <p class="verified-badge geo-verified-badge">⬡ Verified ASquare Package</p>
                 </div>
             </div>
         </div>
