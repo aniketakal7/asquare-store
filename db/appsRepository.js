@@ -282,6 +282,13 @@ function claimApp(appId, developerId, developerName) {
     return getAppById(appId);
 }
 
+function setFeatured(id, featured = true) {
+    const app = getAppById(id);
+    if (!app) return null;
+    db.prepare('UPDATE apps SET featured = ? WHERE id = ?').run(featured ? 1 : 0, id);
+    return getAppById(id);
+}
+
 module.exports = {
     getAllApps,
     getAppById,
@@ -297,5 +304,6 @@ module.exports = {
     getDeveloperByToken,
     getDeveloperById,
     ensureDeveloperExists,
-    claimApp
+    claimApp,
+    setFeatured
 };

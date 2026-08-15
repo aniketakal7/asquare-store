@@ -27,7 +27,7 @@
     ],
     "screenshots": [],
     "publishedAt": "2026-08-11T00:00:00.000Z",
-    "featured": true,
+    "featured": false,
     "protected": false,
     "status": "published",
     "developerId": "system-admin"
@@ -131,7 +131,7 @@
     ],
     "screenshots": [],
     "publishedAt": "2026-03-10T00:00:00.000Z",
-    "featured": true,
+    "featured": false,
     "protected": true,
     "status": "unlisted",
     "developerId": "system-admin"

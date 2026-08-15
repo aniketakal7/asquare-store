@@ -448,6 +448,23 @@ app.post('/api/admin/apps/:id/reject', requireAdmin, (req, res) => {
     }
 });
 
+app.post('/api/admin/apps/:id/feature', requireAdmin, (req, res) => {
+    try {
+        const { featured = true } = req.body;
+        const updated = repo.setFeatured(req.params.id, Boolean(featured));
+        if (!updated) {
+            return res.status(404).json({ error: 'App not found' });
+        }
+        console.log(`[STORE] App "${updated.name}" featured status changed to: ${Boolean(featured)}`);
+        res.json({
+            message: `App "${updated.name}" featured status updated.`,
+            app: updated
+        });
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
 app.delete('/api/apps/:id', requireAdmin, (req, res) => {
     try {
         const app = repo.getAppById(req.params.id);
