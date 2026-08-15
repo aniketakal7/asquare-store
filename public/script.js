@@ -377,7 +377,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('modal-rating').textContent = app.rating ? app.rating.toFixed(1) : '—';
         document.getElementById('modal-downloads').textContent = formatNumber(app.downloads);
         document.getElementById('modal-size').textContent = app.size || 'N/A';
-        document.getElementById('modal-description').textContent = app.description || app.summary;
         document.getElementById('modal-published').textContent = new Date(app.publishedAt).toLocaleDateString('en-IN', {
             year: 'numeric', month: 'long', day: 'numeric'
         });

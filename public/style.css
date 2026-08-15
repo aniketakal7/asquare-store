@@ -1428,13 +1428,6 @@ h1, h2, h3, .logo {
     margin-top: 0;
 }
 
-.modal-description {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    line-height: 1.7;
-    white-space: pre-line;
-}
-
 /* Reviews */
 .modal-reviews {
     display: flex;
