@@ -79,11 +79,21 @@ function isValidDeveloperId(id) {
 function safeApkPath(filename) {
     if (!filename) return null;
     const safeName = path.basename(filename);
-    const resolved = path.resolve(APPS_DIR, safeName);
-    if (!resolved.startsWith(path.resolve(APPS_DIR) + path.sep) && resolved !== path.resolve(APPS_DIR)) {
-        return null;
+
+    const candidates = [
+        path.resolve(APPS_DIR, safeName),
+        path.resolve(__dirname, 'public', 'apps', safeName),
+        path.resolve(process.cwd(), 'public', 'apps', safeName),
+        path.resolve(__dirname, '..', 'public', 'apps', safeName)
+    ];
+
+    for (const candidate of candidates) {
+        if (fs.existsSync(candidate)) {
+            return candidate;
+        }
     }
-    return resolved;
+
+    return path.resolve(APPS_DIR, safeName);
 }
 
 function cleanupUploadedFiles(files) {
@@ -108,6 +118,41 @@ function formatFileSize(bytes) {
 try {
     fs.mkdirSync(APPS_DIR, { recursive: true });
     fs.mkdirSync(ICONS_DIR, { recursive: true });
+
+    if (IS_VERCEL) {
+        const bundledAppsDirs = [
+            path.join(__dirname, 'public', 'apps'),
+            path.join(process.cwd(), 'public', 'apps')
+        ];
+        for (const dir of bundledAppsDirs) {
+            if (fs.existsSync(dir)) {
+                const files = fs.readdirSync(dir);
+                for (const file of files) {
+                    const src = path.join(dir, file);
+                    const dest = path.join(APPS_DIR, file);
+                    if (fs.existsSync(src) && !fs.existsSync(dest)) {
+                        try { fs.copyFileSync(src, dest); } catch (_) {}
+                    }
+                }
+            }
+        }
+        const bundledIconsDirs = [
+            path.join(__dirname, 'public', 'uploads', 'icons'),
+            path.join(process.cwd(), 'public', 'uploads', 'icons')
+        ];
+        for (const dir of bundledIconsDirs) {
+            if (fs.existsSync(dir)) {
+                const files = fs.readdirSync(dir);
+                for (const file of files) {
+                    const src = path.join(dir, file);
+                    const dest = path.join(ICONS_DIR, file);
+                    if (fs.existsSync(src) && !fs.existsSync(dest)) {
+                        try { fs.copyFileSync(src, dest); } catch (_) {}
+                    }
+                }
+            }
+        }
+    }
 } catch (err) {
     console.warn('[WARN] Could not create upload directories:', err.message);
 }
