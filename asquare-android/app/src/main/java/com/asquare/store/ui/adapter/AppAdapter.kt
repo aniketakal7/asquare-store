@@ -49,15 +49,8 @@ class AppAdapter(
             binding.tvSize.text = app.size ?: "APK"
             binding.tvDownloads.text = "${app.downloads ?: 0} DL"
 
-            // Construct full icon URL
-            val serverBase = ASquareApplication.instance.serverUrl.trimEnd('/')
-            val iconUrl = when {
-                !app.iconFile.isNullOrBlank() -> "$serverBase/uploads/icons/${app.iconFile}"
-                !app.icon.isNullOrBlank() && app.icon.startsWith("http") -> app.icon
-                !app.icon.isNullOrBlank() -> "$serverBase/${app.icon.trimStart('/')}"
-                else -> null
-            }
-
+            // Load icon with resolved URL
+            val iconUrl = app.getResolvedIconUrl()
             if (iconUrl != null) {
                 binding.ivAppIcon.load(iconUrl) {
                     crossfade(true)

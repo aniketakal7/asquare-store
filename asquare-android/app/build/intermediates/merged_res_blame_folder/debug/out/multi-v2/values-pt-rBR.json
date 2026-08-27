@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.asquare.store.app-mergeDebugResources-35:/values-pt-rBR/values-pt-rBR.xml",
+            "outputFile": "com.asquare.store.app-mergeDebugResources-36:/values-pt-rBR/values-pt-rBR.xml",
             "map": [
                 {
                     "source": "C:\\Users\\kanch\\.gradle\\caches\\transforms-3\\9756fab58daf3b55028a539310104216\\transformed\\appcompat-1.6.1\\res\\values-pt-rBR\\values-pt-rBR.xml",

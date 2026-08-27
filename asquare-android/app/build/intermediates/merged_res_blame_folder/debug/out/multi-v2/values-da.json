@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.asquare.store.app-mergeDebugResources-35:/values-da/values-da.xml",
+            "outputFile": "com.asquare.store.app-mergeDebugResources-36:/values-da/values-da.xml",
             "map": [
                 {
                     "source": "C:\\Users\\kanch\\.gradle\\caches\\transforms-3\\3c6da16fc08c5e7b7caed394bbbfefaa\\transformed\\material-1.11.0\\res\\values-da\\values-da.xml",

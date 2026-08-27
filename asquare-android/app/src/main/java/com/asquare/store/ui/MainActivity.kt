@@ -236,14 +236,7 @@ class MainActivity : AppCompatActivity() {
         val hardwareInfo = DeviceUtils.getDeviceHardwareInfo(this)
         dialogBinding.tvCompatibilityBadge.text = "✓ Compatible with your device (${hardwareInfo.primaryAbi} · ${hardwareInfo.androidVersion})"
 
-        val serverBase = ASquareApplication.instance.serverUrl.trimEnd('/')
-        val iconUrl = when {
-            !app.iconFile.isNullOrBlank() -> "$serverBase/uploads/icons/${app.iconFile}"
-            !app.icon.isNullOrBlank() && app.icon.startsWith("http") -> app.icon
-            !app.icon.isNullOrBlank() -> "$serverBase/${app.icon.trimStart('/')}"
-            else -> null
-        }
-
+        val iconUrl = app.getResolvedIconUrl()
         if (iconUrl != null) {
             dialogBinding.ivDetailIcon.load(iconUrl) {
                 crossfade(true)

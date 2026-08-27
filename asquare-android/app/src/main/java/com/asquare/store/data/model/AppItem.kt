@@ -17,10 +17,20 @@ data class AppItem(
     @SerializedName("size") val size: String? = null,
     @SerializedName("downloads") val downloads: Int? = 0,
     @SerializedName("rating") val rating: Double? = 5.0,
-    @SerializedName("publishedAt") val publishedAt: String? = null,
     @SerializedName("featured") val featured: Boolean? = false,
     @SerializedName("status") val status: String? = "approved"
-)
+) {
+    fun getResolvedIconUrl(): String? {
+        val serverBase = com.asquare.store.ASquareApplication.instance.serverUrl.trimEnd('/')
+        return when {
+            !iconFile.isNullOrBlank() && (iconFile.startsWith("http://") || iconFile.startsWith("https://")) -> iconFile
+            !iconFile.isNullOrBlank() && iconFile.startsWith("uploads/") -> "$serverBase/$iconFile"
+            !iconFile.isNullOrBlank() -> "$serverBase/uploads/icons/$iconFile"
+            !icon.isNullOrBlank() && (icon.startsWith("http://") || icon.startsWith("https://")) -> icon
+            else -> null
+        }
+    }
+}
 
 data class CategoryItem(
     @SerializedName("id") val id: String,
