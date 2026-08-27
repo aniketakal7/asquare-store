@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Deep, tonal foundation with a restrained electric-blue accent. -->
+    <color name="bg_primary">#0A0D14</color>
+    <color name="bg_secondary">#101520</color>
+    <color name="bg_elevated">#171E2B</color>
+    <color name="bg_card">#151C28</color>
+    <color name="bg_card_hover">#1C2635</color>
+    <color name="bg_accent_soft">#1A78A6FF</color>
+
+    <color name="neon_cyan">#8AB4FF</color>
+    <color name="neon_purple">#B89CFF</color>
+    <color name="neon_pink">#F3A6D7</color>
+    <color name="neon_green">#7DD7AE</color>
+    <color name="neon_amber">#F5C76C</color>
+
+    <color name="text_primary">#F7F8FC</color>
+    <color name="text_secondary">#BEC7D8</color>
+    <color name="text_muted">#7F8A9F</color>
+
+    <color name="border_glass">#2A3446</color>
+    <color name="border_glow">#6E9DFF</color>
+    <color name="transparent">#00000000</color>
+    <color name="glass_scrim">#E60A0D14</color>
+</resources>

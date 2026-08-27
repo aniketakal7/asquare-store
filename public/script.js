@@ -119,14 +119,17 @@ document.addEventListener('DOMContentLoaded', () => {
             storeError.style.display = 'none';
         }
         try {
-            const res = await fetch('/api/apps');
-            if (!res.ok) throw new Error('API error');
+            let res = await fetch('/api/apps').catch(() => null);
+            if (!res || !res.ok) {
+                res = await fetch('apps.json');
+            }
+            if (!res.ok) throw new Error('Could not fetch app catalog');
             allApps = await res.json();
             if (storeStatus) storeStatus.style.display = 'none';
             renderAll();
             openAppFromQuery();
         } catch (err) {
-            console.warn('Could not fetch from API:', err);
+            console.warn('Could not fetch from API or apps.json:', err);
             allApps = [];
             if (storeStatus) {
                 storeLoading.style.display = 'none';

@@ -289,6 +289,15 @@ function setFeatured(id, featured = true) {
     return getAppById(id);
 }
 
+function getCategories() {
+    const rows = db.prepare(`
+        SELECT DISTINCT category FROM apps
+        WHERE category IS NOT NULL AND status = 'published'
+        ORDER BY category ASC
+    `).all();
+    return rows.map(r => r.category);
+}
+
 module.exports = {
     getAllApps,
     getAppById,
@@ -305,5 +314,6 @@ module.exports = {
     getDeveloperById,
     ensureDeveloperExists,
     claimApp,
-    setFeatured
+    setFeatured,
+    getCategories
 };

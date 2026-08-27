@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ASquare Store</string>
+    <string name="tagline">Next-Gen Android App Repository</string>
+    <string name="nav_discover">Discover</string>
+    <string name="nav_browse">Browse</string>
+    <string name="nav_installed">Installed</string>
+    <string name="nav_device">Hardware</string>
+    <string name="search_placeholder">Search apps, tools, games...</string>
+    <string name="featured_apps">Featured Deployments</string>
+    <string name="all_apps">All Applications</string>
+    <string name="btn_install">Install APK</string>
+    <string name="btn_downloading">Downloading...</string>
+    <string name="btn_open">Open App</string>
+    <string name="btn_update">Update</string>
+    <string name="category_all">All</string>
+    <string name="category_tools">Tools</string>
+    <string name="category_games">Games</string>
+    <string name="category_productivity">Productivity</string>
+    <string name="category_social">Social</string>
+    <string name="device_hardware_title">Device Hardware Diagnostics</string>
+    <string name="server_settings_title">Backend Server Settings</string>
+    <string name="server_url_hint">http://10.0.2.2:3000</string>
+    <string name="no_apps_found">No applications match your criteria</string>
+    <string name="install_permission_needed">Please allow ASquare Store to install unknown apps in device settings.</string>
+</resources>

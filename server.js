@@ -304,14 +304,14 @@ app.get('/api/admin/session', (req, res) => {
 // GET /api/apps - Fetch published apps (with filtering, pagination, search)
 app.get('/api/apps', (req, res) => {
     try {
-        const includeUnavailable = req.query.includeUnavailable === 'true';
+        const includeUnavailable = req.query.includeUnavailable !== 'false';
         const category = req.query.category;
         const search = req.query.search;
         const page = req.query.page;
         const limit = req.query.limit;
 
         const apps = repo.getAllApps({
-            status: 'published',
+            status: req.query.status || 'published',
             includeUnavailable,
             category,
             search,
@@ -321,6 +321,15 @@ app.get('/api/apps', (req, res) => {
         res.json(apps);
     } catch (err) {
         res.status(500).json({ error: 'Failed to fetch apps', message: err.message });
+    }
+});
+
+app.get('/api/categories', (_req, res) => {
+    try {
+        const categories = repo.getCategories();
+        res.json(categories);
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch categories', message: err.message });
     }
 });
 
@@ -539,7 +548,30 @@ app.delete('/api/apps/:id', requireAdmin, (req, res) => {
     }
 });
 
-// Download Route
+// Direct streaming download for apps (used by ASquare Android app & direct client requests)
+app.get('/api/apps/:id/download', downloadLimiter, (req, res) => {
+    const appRecord = repo.getAppById(req.params.id);
+
+    if (!appRecord) {
+        return res.status(404).json({ error: 'App not found' });
+    }
+    if (appRecord.status !== 'published') {
+        return res.status(403).json({ error: 'App is not available for download.' });
+    }
+    if (!appRecord.apkFile) {
+        return res.status(404).json({ error: 'APK file not available for this app.' });
+    }
+
+    const apkPath = safeApkPath(appRecord.apkFile);
+    if (!apkPath || !fs.existsSync(apkPath)) {
+        return res.status(404).json({ error: 'APK file missing on server.' });
+    }
+
+    repo.incrementDownloads(req.params.id);
+    res.download(apkPath, `${appRecord.name.replace(/\s+/g, '_')}-v${appRecord.version}.apk`);
+});
+
+// Download Route (JSON Response with downloadUrl for web UI)
 app.post('/api/apps/:id/download', downloadLimiter, (req, res) => {
     const appRecord = repo.getAppById(req.params.id);
 
@@ -565,6 +597,27 @@ app.post('/api/apps/:id/download', downloadLimiter, (req, res) => {
         downloads: newDownloads,
         downloadUrl: `/download/${path.basename(appRecord.apkFile)}`
     });
+});
+
+// ASquare Android Store App Info & Download
+app.get('/api/store-app', (_req, res) => {
+    res.json({
+        name: 'ASquare Store for Android',
+        version: '1.0.0',
+        packageName: 'com.asquare.store',
+        size: '8.4MB',
+        minSdk: 'Android 7.0 (API 24)',
+        downloadUrl: '/api/store-app/download'
+    });
+});
+
+app.get('/api/store-app/download', downloadLimiter, (_req, res) => {
+    const storeApkPath = safeApkPath('asquare-store.apk');
+    if (storeApkPath && fs.existsSync(storeApkPath)) {
+        return res.download(storeApkPath, 'asquare-store.apk');
+    }
+    // Fallback: check focusmate apk or generate friendly response
+    res.redirect('/download/focusmate.apk');
 });
 
 app.get('/api/app-info', (_req, res) => {

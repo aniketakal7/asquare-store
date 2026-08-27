@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "com.asquare.store.app-mergeDebugResources-36:/layout/dialog_app_details.xml",
+        "source": "com.asquare.store.app-main-39:/layout/dialog_app_details.xml"
+    },
+    {
+        "merged": "com.asquare.store.app-mergeDebugResources-36:/layout/dialog_hardware_spec.xml",
+        "source": "com.asquare.store.app-main-39:/layout/dialog_hardware_spec.xml"
+    },
+    {
+        "merged": "com.asquare.store.app-mergeDebugResources-36:/layout/item_app_card.xml",
+        "source": "com.asquare.store.app-main-39:/layout/item_app_card.xml"
+    },
+    {
+        "merged": "com.asquare.store.app-mergeDebugResources-36:/layout/activity_main.xml",
+        "source": "com.asquare.store.app-main-39:/layout/activity_main.xml"
+    }
+]

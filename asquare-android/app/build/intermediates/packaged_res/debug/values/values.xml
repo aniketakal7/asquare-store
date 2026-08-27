@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg_accent_soft">#1A78A6FF</color>
+    <color name="bg_card">#151C28</color>
+    <color name="bg_card_hover">#1C2635</color>
+    <color name="bg_elevated">#171E2B</color>
+    <color name="bg_primary">#0A0D14</color>
+    <color name="bg_secondary">#101520</color>
+    <color name="border_glass">#2A3446</color>
+    <color name="border_glow">#6E9DFF</color>
+    <color name="glass_scrim">#E60A0D14</color>
+    <color name="neon_amber">#F5C76C</color>
+    <color name="neon_cyan">#8AB4FF</color>
+    <color name="neon_green">#7DD7AE</color>
+    <color name="neon_pink">#F3A6D7</color>
+    <color name="neon_purple">#B89CFF</color>
+    <color name="text_muted">#7F8A9F</color>
+    <color name="text_primary">#F7F8FC</color>
+    <color name="text_secondary">#BEC7D8</color>
+    <color name="transparent">#00000000</color>
+    <string name="all_apps">All Applications</string>
+    <string name="app_name">ASquare Store</string>
+    <string name="btn_downloading">Downloading...</string>
+    <string name="btn_install">Install APK</string>
+    <string name="btn_open">Open App</string>
+    <string name="btn_update">Update</string>
+    <string name="category_all">All</string>
+    <string name="category_games">Games</string>
+    <string name="category_productivity">Productivity</string>
+    <string name="category_social">Social</string>
+    <string name="category_tools">Tools</string>
+    <string name="device_hardware_title">Device Hardware Diagnostics</string>
+    <string name="featured_apps">Featured Deployments</string>
+    <string name="install_permission_needed">Please allow ASquare Store to install unknown apps in device settings.</string>
+    <string name="nav_browse">Browse</string>
+    <string name="nav_device">Hardware</string>
+    <string name="nav_discover">Discover</string>
+    <string name="nav_installed">Installed</string>
+    <string name="no_apps_found">No applications match your criteria</string>
+    <string name="search_placeholder">Search apps, tools, games...</string>
+    <string name="server_settings_title">Backend Server Settings</string>
+    <string name="server_url_hint">http://10.0.2.2:3000</string>
+    <string name="tagline">Next-Gen Android App Repository</string>
+    <style name="ASquareAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="android:colorAccent">@color/neon_cyan</item>
+        <item name="android:windowBackground">@drawable/bg_dialog</item>
+    </style>
+    <style name="ASquareBottomSheet" parent="Widget.Material3.BottomSheet.Modal">
+        <item name="android:background">@drawable/bg_bottom_sheet</item>
+        <item name="backgroundTint">@color/bg_secondary</item>
+    </style>
+    <style name="Theme.ASquareStore" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">@color/neon_cyan</item>
+        <item name="colorSecondary">@color/neon_purple</item>
+        <item name="android:fontFamily">sans</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:statusBarColor">@color/bg_primary</item>
+        <item name="android:navigationBarColor">@color/bg_primary</item>
+        <item name="android:windowBackground">@color/bg_primary</item>
+        <item name="colorSurface">@color/bg_card</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="bottomSheetStyle">@style/ASquareBottomSheet</item>
+        <item name="alertDialogTheme">@style/ASquareAlertDialog</item>
+    </style>
+</resources>
