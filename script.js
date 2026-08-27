@@ -510,18 +510,30 @@ document.addEventListener('DOMContentLoaded', () => {
     // DOWNLOAD APP
     // ==================
     async function downloadApp(app) {
+        if (!app.apkFile) {
+            showToast('ℹ️', `${app.name} APK will be available soon!`);
+            return;
+        }
+
         try {
-            const res = await fetch(`/api/apps/${app.id}/download`, { method: 'POST' });
-            if (!res.ok) {
-                const err = await res.json().catch(() => ({}));
-                throw new Error(err.error || 'Download failed');
+            // If running on static host like GitHub Pages, use direct static path
+            const isStaticHost = window.location.hostname.includes('github.io') || window.location.protocol === 'file:';
+            let downloadUrl = `apps/${app.apkFile}`;
+
+            if (!isStaticHost) {
+                try {
+                    const res = await fetch(`/api/apps/${app.id}/download`, { method: 'POST' });
+                    if (res.ok) {
+                        const data = await res.json();
+                        const localApp = allApps.find(a => a.id === app.id);
+                        if (localApp) localApp.downloads = data.downloads;
+                        if (data.downloadUrl) downloadUrl = data.downloadUrl;
+                    }
+                } catch (e) {
+                    console.log('Dynamic API unavailable, falling back to static path');
+                }
             }
-            const data = await res.json();
 
-            const localApp = allApps.find(a => a.id === app.id);
-            if (localApp) localApp.downloads = data.downloads;
-
-            const downloadUrl = data.downloadUrl || `/download/${app.apkFile}`;
             const link = document.createElement('a');
             link.href = downloadUrl;
             link.download = app.name.replace(/\s+/g, '_') + '.apk';
@@ -530,14 +542,9 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.removeChild(link);
 
             showToast('📥', `Downloading ${app.name}...`);
-            renderAll();
-
-            if (currentModalApp && currentModalApp.id === app.id) {
-                document.getElementById('modal-downloads').textContent = formatNumber(data.downloads);
-            }
         } catch (err) {
             console.error('Download error:', err);
-            showToast('❌', err.message || 'Download failed. Please try again.');
+            showToast('❌', 'Download failed. Please try again.');
         }
     }
 
