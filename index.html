@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="google-site-verification" content="CQLECwdv1M_i-txnhML2JX5U5AUuuLq8VHtqoh32PNc" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASquare Store | Your Premium App Marketplace</title>
+    <meta name="description" content="Discover, download, and publish apps on the ASquare Store. A premium app marketplace for Android apps, tools, and utilities.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- ============ NAVBAR ============ -->
+    <nav class="navbar" id="navbar">
+        <div class="container nav-container">
+            <a href="#" class="logo" id="logo-home">A<span>Square</span></a>
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-tab="discover" id="tab-discover">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+                    Discover
+                </button>
+                <button class="nav-tab" data-tab="browse" id="tab-browse">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                    Browse
+                </button>
+                <a href="/api/store-app/download" class="nav-tab" id="tab-get-app" style="text-decoration:none; color: #00f0ff; font-weight:600; display: inline-flex; align-items: center; gap: 4px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                    Get App
+                </a>
+            </div>
+            <div class="nav-search-mini">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ============ DISCOVER PAGE ============ -->
+    <main class="page page-discover active" id="page-discover">
+        <!-- Hero / Featured App Banner -->
+        <section class="store-hero">
+            <div class="hero-bg-effects">
+                <div class="hero-orb orb-1"></div>
+                <div class="hero-orb orb-2"></div>
+                <div class="hero-orb orb-3"></div>
+            </div>
+            <div class="container">
+                <div class="featured-banner glass" id="featured-banner">
+                    <div class="featured-badge">⭐ FEATURED</div>
+                    <div class="featured-content">
+                        <div class="featured-icon" id="featured-icon">🧠</div>
+                        <div class="featured-info">
+                            <h1 id="featured-name">FocusMate</h1>
+                            <p class="featured-developer" id="featured-developer">ASquare Labs</p>
+                            <p class="featured-summary" id="featured-summary">Premium AI assistant for productivity and focus.</p>
+                            <div class="featured-meta">
+                                <span class="meta-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> <span id="featured-rating">4.8</span></span>
+                                <span class="meta-chip">📥 <span id="featured-downloads">12K+</span></span>
+                                <span class="meta-chip">📦 <span id="featured-size">70MB</span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-install" id="featured-install-btn">Install</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ASquare Android Store App Banner -->
+        <section class="container" style="margin-top: 1.5rem; margin-bottom: 1.5rem;">
+            <div class="glass" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.25rem; padding: 1.25rem 1.75rem; border-radius: var(--radius-lg); border: 1px solid rgba(0, 240, 255, 0.3); background: linear-gradient(135deg, rgba(15, 22, 38, 0.85) 0%, rgba(8, 12, 20, 0.95) 100%); box-shadow: 0 0 25px rgba(0, 240, 255, 0.1);">
+                <div style="display: flex; align-items: center; gap: 1.25rem;">
+                    <div style="width: 52px; height: 52px; border-radius: 14px; background: linear-gradient(135deg, #00f0ff, #a855f7); display: flex; align-items: center; justify-content: center; font-size: 26px; box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);">
+                        🤖
+                    </div>
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <h3 style="font-size: 1.15rem; font-weight: 700; color: #fff; margin: 0;">Get the ASquare Android App</h3>
+                            <span style="font-size: 0.7rem; padding: 2px 8px; border-radius: 999px; background: rgba(0, 240, 255, 0.15); color: #00f0ff; border: 1px solid rgba(0, 240, 255, 0.4); font-weight: 600;">NEW CLIENT</span>
+                        </div>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px; margin-bottom: 0;">Hardware architecture detection, background updates, and 1-click APK installations.</p>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <a href="/api/store-app/download" class="btn-install" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 0.6rem 1.25rem; font-size: 0.9rem; font-weight: 700; background: linear-gradient(135deg, #00f0ff, #00b4d8); color: #080c14; border-radius: var(--radius-md); box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Download Client APK
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Loading / Error states -->
+        <section class="store-status container" id="store-status" style="display:none;">
+            <div class="store-loading" id="store-loading">
+                <span class="spinner"></span> Loading apps...
+            </div>
+            <div class="store-error" id="store-error" style="display:none;">
+                <p>Could not load the store. Check your connection and try again.</p>
+                <button class="btn-install" id="store-retry-btn" type="button">Retry</button>
+            </div>
+        </section>
+
+        <!-- Categories -->
+        <section class="categories-section">
+            <div class="container">
+                <h2 class="section-heading">Categories</h2>
+                <div class="category-pills" id="category-pills">
+                    <button class="pill active" data-category="all">🔥 All</button>
+                    <button class="pill" data-category="Productivity">⚡ Productivity</button>
+                    <button class="pill" data-category="Health">💚 Health</button>
+                    <button class="pill" data-category="Developer Tools">🛠️ Dev Tools</button>
+                    <button class="pill" data-category="Games">🎮 Games</button>
+                    <button class="pill" data-category="Utility">🔧 Utility</button>
+                    <button class="pill" data-category="Creative">🎨 Creative</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Top Apps Grid -->
+        <section class="apps-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-heading">Top Apps</h2>
+                    <button class="see-all-btn" id="see-all-btn">See All →</button>
+                </div>
+                <div class="apps-grid" id="discover-apps-grid">
+                    <!-- Dynamically populated -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Recently Added -->
+        <section class="apps-section">
+            <div class="container">
+                <h2 class="section-heading">Recently Added</h2>
+                <div class="apps-scroll-row" id="recent-apps-row">
+                    <!-- Dynamically populated -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ============ BROWSE PAGE ============ -->
+    <main class="page page-browse" id="page-browse">
+        <section class="browse-header">
+            <div class="container">
+                <h1>Browse All Apps</h1>
+                <div class="browse-controls">
+                    <div class="search-bar" id="search-bar">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input type="text" id="search-input" placeholder="Search apps..." autocomplete="off">
+                        <button class="search-clear" id="search-clear">&times;</button>
+                    </div>
+                    <select class="sort-select" id="sort-select">
+                        <option value="downloads">🔥 Trending</option>
+                        <option value="newest">🆕 Newest</option>
+                        <option value="name">🔤 Name A-Z</option>
+                        <option value="rating">⭐ Top Rated</option>
+                    </select>
+                </div>
+                <div class="browse-category-pills" id="browse-category-pills">
+                    <button class="pill active" data-category="all">All</button>
+                    <button class="pill" data-category="Productivity">Productivity</button>
+                    <button class="pill" data-category="Health">Health</button>
+                    <button class="pill" data-category="Developer Tools">Dev Tools</button>
+                    <button class="pill" data-category="Games">Games</button>
+                    <button class="pill" data-category="Utility">Utility</button>
+                    <button class="pill" data-category="Creative">Creative</button>
+                </div>
+            </div>
+        </section>
+        <section class="browse-results">
+            <div class="container">
+                <p class="results-count" id="results-count"></p>
+                <div class="apps-grid full-grid" id="browse-apps-grid">
+                    <!-- Dynamically populated -->
+                </div>
+                <div class="empty-state" id="browse-empty" style="display:none;">
+                    <div class="empty-icon">🔍</div>
+                    <h3>No apps found</h3>
+                    <p>Try a different search term or category.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+    <!-- ============ MOBILE BOTTOM NAVIGATION ============ -->
+    <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Mobile Navigation">
+        <button class="mobile-nav-item active nav-tab" data-tab="discover" id="mobile-tab-discover">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+            <span>Discover</span>
+        </button>
+        <button class="mobile-nav-item nav-tab" data-tab="browse" id="mobile-tab-browse">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            <span>Browse</span>
+        </button>
+        <a href="/api/store-app/download" class="mobile-nav-item" id="mobile-tab-get-app" style="text-decoration: none; color: #00f0ff;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            <span>Get App</span>
+        </a>
+        <a href="developer.html" class="mobile-nav-item" id="mobile-tab-console">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></svg>
+            <span>Console</span>
+        </a>
+    </nav>
+
+    <!-- ============ APP DETAIL MODAL (GEOMETRIC POPUP) ============ -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal-content glass geometric-modal" id="modal-content">
+            <!-- Geometric Tech HUD Accents -->
+            <div class="geo-corner-bracket geo-tl"></div>
+            <div class="geo-corner-bracket geo-tr"></div>
+            <div class="geo-corner-bracket geo-bl"></div>
+            <div class="geo-corner-bracket geo-br"></div>
+            <div class="geo-glow-line top"></div>
+            <div class="geo-glow-line bottom"></div>
+            <div class="geo-hud-tag"><span>SYS // ASQUARE PKG</span></div>
+
+            <button class="modal-close geo-close" id="modal-close" aria-label="Close dialog">&times;</button>
+            <div class="modal-header">
+                <div class="modal-icon geo-icon-frame" id="modal-icon">📦</div>
+                <div class="modal-title-area">
+                    <h2 id="modal-name">App Name</h2>
+                    <p class="modal-developer" id="modal-developer">Developer</p>
+                    <div class="modal-badges">
+                        <span class="badge-category geo-pill" id="modal-category">Category</span>
+                        <span class="badge-version geo-pill" id="modal-version">v1.0.0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-stats geo-stats-grid">
+                <div class="stat geo-stat-cell">
+                    <span class="stat-value" id="modal-rating">4.5</span>
+                    <span class="stat-label">Rating</span>
+                </div>
+                <div class="stat-divider geo-stat-divider"></div>
+                <div class="stat geo-stat-cell">
+                    <span class="stat-value" id="modal-downloads">0</span>
+                    <span class="stat-label">Downloads</span>
+                </div>
+                <div class="stat-divider geo-stat-divider"></div>
+                <div class="stat geo-stat-cell">
+                    <span class="stat-value" id="modal-size">N/A</span>
+                    <span class="stat-label">Size</span>
+                </div>
+            </div>
+            <div class="modal-actions geo-actions">
+                <button class="btn-modal-install geo-btn-install" id="modal-install-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    <span>Install</span>
+                </button>
+                <button class="btn-modal-secondary geo-btn-secondary" id="modal-share-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                    <span>Share</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h3>Reviews</h3>
+                <div class="modal-reviews" id="modal-reviews">
+                    <!-- Dynamically populated -->
+                </div>
+                <div class="no-reviews" id="no-reviews" style="display:none;">
+                    <p>No reviews yet. Be the first to try this app!</p>
+                </div>
+
+                <div class="add-review-form geo-review-form" id="add-review-container">
+                    <h4>Write a Review</h4>
+                    <form id="review-form">
+                        <div class="form-review-row">
+                            <input type="text" id="review-user" placeholder="Your Name" required>
+                            <select id="review-rating" required>
+                                <option value="5">★★★★★ (5)</option>
+                                <option value="4">★★★★☆ (4)</option>
+                                <option value="3">★★★☆☆ (3)</option>
+                                <option value="2">★★☆☆☆ (2)</option>
+                                <option value="1">★☆☆☆☆ (1)</option>
+                            </select>
+                        </div>
+                        <textarea id="review-comment" placeholder="What did you think of this app?" rows="2"></textarea>
+                        <button type="submit" class="btn-review-submit geo-btn-submit">Submit Review</button>
+                    </form>
+                </div>
+
+                <div class="modal-footer-info">
+                    <p>Published: <span id="modal-published">-</span></p>
+                    <p class="verified-badge geo-verified-badge">⬡ Verified ASquare Package</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ TOAST NOTIFICATION ============ -->
+    <div class="toast" id="toast">
+        <span class="toast-icon" id="toast-icon">✅</span>
+        <span class="toast-message" id="toast-message">Action completed</span>
+    </div>
+
+    <footer>
+        <div class="container" style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+            <p>&copy; 2026 ASquare Store. All rights reserved. Built with ❤️</p>
+            <p style="font-size: 0.85rem; color: var(--text-dim);">Are you a developer? Submit and manage your apps on the <a href="developer.html" style="color: var(--accent); text-decoration: none; font-weight: 600; transition: var(--transition);" onmouseover="this.style.color='var(--primary-light)'" onmouseout="this.style.color='var(--accent)'">ASquare Console 🚀</a></p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
